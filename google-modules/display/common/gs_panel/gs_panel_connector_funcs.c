@@ -19,7 +19,8 @@
 #include "gs_panel/gs_panel.h"
 #include "trace/panel_trace.h"
 
-#include "trace/dpu_trace.h"
+#define DPU_ATRACE_BEGIN(a)
+#define DPU_ATRACE_END(a)
 
 /* drm_connector_helper_funcs */
 
