@@ -102,8 +102,8 @@
 
 #ifdef DNGL_AXI_ERROR_LOGGING
 #include <dhd_linux_wq.h>
-#include <dhd_linux.h>
 #endif /* DNGL_AXI_ERROR_LOGGING */
+#include <dhd_linux.h>
 
 #ifdef DHD_PKT_LOGGING
 #include <dhd_pktlog.h>
@@ -364,8 +364,6 @@ static void dhdpcie_pme_stat_clear(dhd_bus_t *bus);
 #if defined(SUPPORT_MULTIPLE_BOARD_REVISION)
 extern void concate_custom_board_revision(char *nv_path);
 #endif /* SUPPORT_MULTIPLE_BOARD_REVISION */
-
-static void dhdpcie_dump_sreng_regs(dhd_bus_t *bus);
 
 /* IOVar table */
 enum {
@@ -1739,7 +1737,9 @@ dhdpcie_cto_recovery_handler(dhd_pub_t *dhd)
 #endif /* DHD_FW_COREDUMP */
 	}
 
+#if defined(DHD_FW_COREDUMP) && defined(DHD_SSSR_DUMP)
 exit:
+#endif /* DHD_FW_COREDUMP && DHD_SSSR_DUMP */
 #ifdef OEM_ANDROID
 #ifdef SUPPORT_LINKDOWN_RECOVERY
 #ifdef CONFIG_ARCH_MSM
@@ -1747,12 +1747,14 @@ exit:
 #endif /* CONFIG_ARCH_MSM */
 #endif /* SUPPORT_LINKDOWN_RECOVERY */
 
+#ifdef DHD_SSSR_DUMP
 	/* do not set linkdown if FIS dump collection
 	 * is to be done for CTO
 	 */
 	if (!bus->dhd->collect_fis) {
 		dhd_bus_set_linkdown(dhd, TRUE);
 	}
+#endif
 	bus->dhd->hang_reason = HANG_REASON_PCIE_CTO_DETECT;
 	/* Send HANG event */
 	dhd_os_send_hang_message(bus->dhd);
@@ -3239,10 +3241,12 @@ dhdpcie_advertise_bus_cleanup(dhd_pub_t *dhdp)
 				bcm_bprintf_bypass = FALSE;
 
 				DHD_ERROR(("%s : Did not receive DB7 Ack\n", __FUNCTION__));
+#ifdef DHD_FW_COREDUMP
 				if (dhdp->memdump_enabled) {
 					dhdp->memdump_type = DUMP_TYPE_NO_DB7_ACK;
 					dhdpcie_mem_dump(dhdp->bus);
 				}
+#endif /* DHD_FW_COREDUMP */
 #ifdef WBRC
 				if (dhdp->fw_mode_changed == FALSE) {
 					DHD_ERROR(("%s : Set do_chip_bighammer\n", __FUNCTION__));
@@ -6204,6 +6208,7 @@ dhdpcie_bus_membytes(dhd_bus_t *bus, bool write, dhd_pcie_mem_region_t region,
 		return BCME_ERROR;
 	}
 
+#ifdef DHD_SSSR_DUMP
 	/* if FIS trigerred, allow membytes to go through in order to get
 	 * FIS dumps
 	 */
@@ -6214,7 +6219,6 @@ dhdpcie_bus_membytes(dhd_bus_t *bus, bool write, dhd_pcie_mem_region_t region,
 		return BCME_ERROR;
 	}
 
-#ifdef DHD_SSSR_DUMP
 	if (bus->sssr_in_progress) {
 		DHD_ERROR_RLMT(("%s: SSSR in progress, skip\n", __FUNCTION__));
 		return BCME_ERROR;
@@ -16663,8 +16667,10 @@ dhd_bus_set_linkdown(dhd_pub_t *dhdp, bool val)
 {
 	if (dhdp && dhdp->bus) {
 		dhdp->bus->is_linkdown = val;
+#ifdef EWP_DACS
 		DHD_PRINT(("%s: pcie_hwhdr_rev = %u\n", __FUNCTION__,
 			dhdp->bus->ewp_hw_info.pcie_hwhdr_rev));
+#endif
 	}
 }
 
@@ -17906,11 +17912,13 @@ dhd_bus_update_flow_watermark_stats(struct dhd_bus *bus, uint16 flowid, uint16 r
 		bus->flowring_high_watermark[flowid] = num_items;
 }
 
+#ifdef DHD_FW_COREDUMP
 void *
 dhd_bus_get_socram_buf(struct dhd_bus *bus, struct dhd_pub *dhdp)
 {
 	return dhd_get_fwdump_buf(dhdp, bus->ramsize);
 }
+#endif
 
 void
 dhd_bus_set_signature_path(struct dhd_bus *bus, char *sig_path)
