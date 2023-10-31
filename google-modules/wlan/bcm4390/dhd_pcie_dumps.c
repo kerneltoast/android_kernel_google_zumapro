@@ -1181,7 +1181,9 @@ dhd_bus_dump(dhd_pub_t *dhdp, struct bcmstrbuf *strbuf)
 	}
 #endif /* DHD_SSSR_DUMP */
 
+#ifdef EWP_DACS
 	bcm_bprintf(strbuf, "pcie_hwhdr_rev = %u\n", dhdp->bus->ewp_hw_info.pcie_hwhdr_rev);
+#endif
 #ifdef DHD_WAKE_STATUS
 	bcm_bprintf(strbuf, "wake %u rxwake %u readctrlwake %u\n",
 		bcmpcie_get_total_wake(dhdp->bus), dhdp->bus->wake_counts.rxwake,
@@ -1662,6 +1664,7 @@ dhd_dump_bus_ds_trace(dhd_bus_t *bus, struct bcmstrbuf *strbuf)
 void
 dhd_dump_ds_trace_console(dhd_pub_t *dhdp)
 {
+#ifdef DHD_LOG_DUMP
 	struct bcmstrbuf b;
 	struct bcmstrbuf *strbuf = &b;
 
@@ -1670,6 +1673,7 @@ dhd_dump_ds_trace_console(dhd_pub_t *dhdp)
 	bcm_bprintf_bypass = TRUE;
 	dhd_dump_bus_ds_trace(dhdp->bus, strbuf);
 	bcm_bprintf_bypass = FALSE;
+#endif
 }
 
 void
