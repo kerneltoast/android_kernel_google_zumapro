@@ -573,8 +573,10 @@ static dhd_if_t * dhd_get_ifp_by_ndev(dhd_pub_t *dhdp, struct net_device *ndev);
 static void dhd_update_rx_pkt_chainable_state(dhd_pub_t* dhdp, uint32 idx);
 #endif /* DHD_WET || DHD_MCAST_REGEN || DHD_L2_FILTER */
 
+#ifdef DHD_DEBUG
 /* Error bits */
 module_param(dhd_msg_level, int, 0);
+#endif /* DHD_DEBUG */
 
 #ifdef DHD_FORCE_MAX_CPU_FREQ
 uint dhd_force_max_cpu_freq = 1;
