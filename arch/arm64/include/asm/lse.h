@@ -17,10 +17,8 @@
 #include <asm/atomic_lse.h>
 #include <asm/cpucaps.h>
 
-static __always_inline bool system_uses_lse_atomics(void)
-{
-	return alternative_has_feature_likely(ARM64_HAS_LSE_ATOMICS);
-}
+/* Always use LSE atomics */
+#define system_uses_lse_atomics() true
 
 #define __lse_ll_sc_body(op, ...)					\
 ({									\
@@ -29,9 +27,8 @@ static __always_inline bool system_uses_lse_atomics(void)
 		__ll_sc_##op(__VA_ARGS__);				\
 })
 
-/* In-line patching at runtime */
-#define ARM64_LSE_ATOMIC_INSN(llsc, lse)				\
-	ALTERNATIVE(llsc, __LSE_PREAMBLE lse, ARM64_HAS_LSE_ATOMICS)
+/* Always use LSE atomics */
+#define ARM64_LSE_ATOMIC_INSN(lse)		__LSE_PREAMBLE lse
 
 #else	/* CONFIG_ARM64_LSE_ATOMICS */
 
