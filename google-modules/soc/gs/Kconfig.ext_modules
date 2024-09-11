@@ -6,17 +6,9 @@ source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/display/samsung/Kcon
 source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/display/samsung/panel/Kconfig"
 source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/fingerprint/qcom/qfs4008/Kconfig"
 source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/touch/common/Kconfig"
-source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/touch/fts/ftm5/Kconfig"
-source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/touch/sec/Kconfig"
 source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/trusty/drivers/trusty/Kconfig"
 source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/power/reset/Kconfig"
-
-if RADIO_S5300
-source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/radio/samsung/s5300/Kconfig"
-endif
 
 if RADIO_S5400
 source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/radio/samsung/s5400/Kconfig"
 endif
-
-source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/wlan/wlan_ptracker/Kconfig"
