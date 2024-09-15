@@ -1363,7 +1363,9 @@ int dhd_plat_pcie_resume(void *plat_info)
 	int ret = 0;
 	ret = exynos_pcie_pm_resume(pcie_ch_num);
 	is_plat_pcie_resume = TRUE;
+#ifdef DHD_HOST_CPUFREQ_BOOST
 	dhd_plat_reset_trx_pktcount();
+#endif /* DHD_HOST_CPUFREQ_BOOST */
 	return ret;
 }
 
