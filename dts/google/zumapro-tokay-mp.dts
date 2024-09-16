@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Tokay board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include "zumapro-caimito-common.dtsi"
+#include "zumapro-tokay-common.dtsi"
+#include "zuma-tokay-4_5V-battery.dtsi"
+#include "google-dts-zuma/max777xx-fwupdate.dtsi"
+#include "google-dts-zumapro/zumapro-phone-ignss.dtsi"
+
+/ {
+	board_id = <0x60a06>;
+	board_rev = <0x010000>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA PRO TOKAY MP board based on ZUMA PRO";
+			compatible = "google,ZUMA PRO TOKAY", "google,ZUMA PRO";
+		};
+	};
+};

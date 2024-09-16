@@ -1,0 +1,83 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Wireless Charger device tree entries.
+ *
+ * Copyright 2022 Google LLC
+ */
+
+#include <arm64/exynos/exynos-pinctrl.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	fragment@wlc {
+		target-path = "/";
+		__overlay__ {
+			google,charger {
+				google,wlc-power-supply = "wireless";
+			};
+		};
+	};
+};
+
+&max77779_pinctrl {
+	/* QI_INT_ODL Wireless Charger Interrupt */
+	wc_irq: wc_irq {
+		pins = "gpio4";
+		function = "gpio";
+		input-enable;
+		bias-pull-up;
+	};
+
+	/* QI_RX_COMM_EN_L Wireless Charger Enable */
+	wc_en: wc_en {
+		pins = "gpio1";
+		function = "gpio";
+		bias-disable;
+		output-low;
+	};
+
+	/* QI_PDET_GPOD6 */
+	det_int: det_int {
+		pins = "gpio2";
+		function = "gpio";
+		input-enable;
+		bias-pull-up;
+	};
+
+	ldo_en: ldo_en {
+		pins = "gpio3";
+		function = "gpio";
+		bias-disable;
+		output-low;
+	};
+};
+
+#ifndef ZUMA_BMS_I2CM
+&hsi2c_10 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	#include "google-dts-zuma/zuma-wcharger-ra9530.dtsi"
+};
+#else
+&max77779_i2cm {
+	#include "google-dts-zuma/zuma-wcharger-ra9530.dtsi"
+};
+#endif
+
+&ra9530 {
+	status = "okay";
+	pinctrl-0 = <&wc_irq &det_int &wc_en &ldo_en>;
+
+	idt,gpio_wlc_en = <&max77779_sgpio 1 GPIO_ACTIVE_LOW>;
+	idt,gpio_qien = <&max77779_sgpio 1 GPIO_ACTIVE_LOW>;
+	idt,irq_gpio = <&max77779_sgpio 4 GPIO_ACTIVE_LOW>;
+	idt,irq_det_gpio = <&max77779_sgpio 2 GPIO_ACTIVE_LOW>;
+	idt,gpio_ldo_en = <&max77779_sgpio 3 GPIO_ACTIVE_LOW>;
+
+	idt,ramp-disable;
+	google,enable_15w;
+
+	/* TXID: Phone type */
+	idt,tx_id_phone_type = /bits/ 8 <5>;
+};

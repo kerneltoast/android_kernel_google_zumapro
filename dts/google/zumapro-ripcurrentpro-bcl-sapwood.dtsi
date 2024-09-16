@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Google ZumaPro/Ripcurrentpro bcl Sapwood device tree source
+ *
+ * Copyright (c) 2023 Google, LLC
+ *		https://www.google.com
+ */
+
+
+#include "google-dts-zumapro/zumapro-board-bcl.dtsi"
+
+&google_mitigation {
+	google,ifpmic = <M77779>;
+	google,charger = <&max77779_chg>;
+	google,pmic = <&max77779_pmic>;
+	google,power-supply = <&max77779_fg>;
+	batoilo_lower = <1800>;
+	batoilo_upper = <8000>;
+	batoilo2_lower = <3800>;
+	batoilo2_upper = <10000>;
+	batoilo_wlc_trig_lvl = <5200>;
+	batoilo2_wlc_trig_lvl = <7000>;
+	batoilo_trig_lvl = <5000>;
+	batoilo2_trig_lvl = <8000>;
+	batoilo_bat_open_to = <0x8>;    /* 36ms */
+	batoilo2_bat_open_to = <0x3>;   /* 12ms */
+	batoilo_rel = <0x2>;   /* 1ms */
+	batoilo2_rel = <0x2>;   /* 1ms */
+	batoilo_det = <0x0>;   /* 0ms */
+	batoilo2_det = <0x0>;   /* 0ms */
+	uvlo1_rel = <0x2>;   /* 10ms */
+	uvlo2_rel = <0x2>;   /* 10ms */
+	uvlo1_det = <0x1>;   /* 30us */
+	uvlo2_det = <0x1>;   /* 30us */
+	evt_cnt_enable = <0x1>;
+	evt_cnt_rate = <0x0>;   /* 16k */
+	gpios = <&gpa9 5 GPIO_ACTIVE_HIGH>,		/* VDROOP1 */
+		<&gpa9 6 GPIO_ACTIVE_HIGH>;		/* VDROOP2 */
+        interrupt-parent = <&max77779_pmic_irq>;
+        interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
+};

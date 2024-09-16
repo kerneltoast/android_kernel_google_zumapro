@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Caiman board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#define ZUMA_BMS_I2CM 1
+
+#include "zumapro-caimito-common.dtsi"
+#include "zumapro-caiman-common.dtsi"
+#include "zuma-tokay-4_5V-battery.dtsi"
+#include "google-dts-zuma/max777xx-fwupdate.dtsi"
+#include "zumapro-caimito-cp-features.dtsi"
+
+/ {
+	board_id = <0x60904>;
+	board_rev = <0x010001>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA PRO CAIMAN DVT 1.0 board using i2cm based on ZUMA PRO";
+			compatible = "google,ZUMA PRO CAIMAN", "google,ZUMA PRO";
+		};
+	};
+};

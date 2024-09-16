@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * DMA heap device tree entries specific to zumapro devices.
+ *
+ * Copyright 2023 Google,LLC
+ *
+ */
+
+&faprev {
+	size = <0x1000000>; /* 16MB */
+};

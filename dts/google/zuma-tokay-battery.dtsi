@@ -1,0 +1,72 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries specific to tokay
+ *
+ * Copyright 2023 Google,LLC
+ *
+ */
+
+&google_battery {
+	google,chg-battery-capacity = <4458>;
+
+	google,chg-cv-limits = <4200000 4300000 4350000 4480000>;
+	google,chg-temp-limits = <0 100 200 420 460 480 550>;
+	google,chg-cc-limits = <
+		 50   30    0    0
+		 70   30   30   30
+		120  120  120   50
+		100  100  100   50
+		 50   50    0    0
+		 30    0    0    0
+	>;
+
+	google,chg-topoff-limits = <250 250 250 500 500 500>;
+	google,pullback-current;
+
+	google,ttf-temp-idx= <2>;
+	google,ttf-adapter = <4500>;
+	google,ttf-soc-table =  <71 80 89 93  98  100>;
+	google,ttf-elap-table = <32 50 80 110 200 81>;
+	google,ttf-tier-table = <0 79 86>;
+	google,ttf-report-max-ratio = <0>;
+
+#ifdef ZUMA_BMS_ENABLE_CHG_PROFILE_SWITCH
+	google,enable-switch-chg-profile;
+#endif
+
+	google_debug_chg_profile {
+		google,chg-battery-capacity = <4558>;
+
+		google,fv-uv-resolution = <10000>;
+		google,cv-range-accuracy = <20000>;
+		google,fv-uv-margin-dpct = <1025>;
+		google,fv-dc-ratio = <30>;
+		google,cv-debounce-cnt = <3>;
+		google,cv-tier-ov-cnt = <10>;
+		google,cv-tier-switch-cnt = <3>;
+		google,cv-otv-margin = <12000>;
+		google,chg-cv-limits = <4200000 4300000 4350000 4500000>;
+		google,chg-temp-limits = <0 100 200 420 460 480 550>;
+		google,chg-cc-limits = <
+			 50   30    0    0
+			 70   30   30   30
+			120  120  120   50
+			100  100  100   50
+			 50   50    0    0
+			 30    0    0    0
+		>;
+
+		google,chg-topoff-limits = <250 250 250 500 500 500>;
+		google,pullback-current;
+	};
+};
+
+&max77779_fg {
+	maxim,fg-data {
+#ifdef ZUMA_BMS_PROTO_EVT10_MODEL
+		#include "zuma-tokay-proto-evt10-battery-data.dtsi"
+#else
+		#include "zuma-tokay-battery-data.dtsi"
+#endif
+	};
+};

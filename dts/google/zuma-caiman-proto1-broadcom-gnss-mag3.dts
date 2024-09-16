@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Caiman board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#define ESIM_NO_CHIP_ENABLE_PIN
+#define ZUMA_BMS_PROTO_EVT10_MODEL
+#include "zuma-caimito-common.dtsi"
+#include "zuma-caiman-common.dtsi"
+#include "google-dts-zumapro/zumapro-phone-gps.dtsi"
+#include "zuma-caimito-wifi-4390a0.dtsi"
+
+/ {
+	board_id = <0x40902>;
+	board_rev = <0x010002>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA CAIMAN Proto 1.0 Broadcom GNSS and MAG3 board based on ZUMA";
+			compatible = "google,ZUMA CAIMAN", "google,ZUMA";
+		};
+	};
+};
