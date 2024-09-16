@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load("//build/kernel/kleaf:kernel.bzl", "ddk_module")
+
+# Convenience variables (to reduce repetition)
+
+panel_deps = [
+    "//aosp:all_headers_aarch64",
+    "//aosp-staging:all_headers_aarch64",
+    "//private/google-modules/display/common:ddk_headers",
+    "//private/google-modules/display/common/gs_panel",
+    "//private/google-modules/display/samsung:display.samsung",
+]
+
+panel_visibility = [
+    "//private/devices/google:__subpackages__",
+]
+
+panel_local_defines = [
+    "DYNAMIC_DEBUG_MODULE",
+]
+
+# Note: please add additional drivers as separate ddk modules
+
+ddk_module(
+    name = "panel-gs-km4",
+    srcs = [
+        "panel-gs-km4.c",
+    ],
+    out = "panel-gs-km4.ko",
+    kernel_build = "//private/google-modules/soc/gs:gs_kernel_build",
+    local_defines = panel_local_defines,
+    visibility = panel_visibility,
+    deps = panel_deps,
+)
+
+ddk_module(
+    name = "panel-gs-cm4",
+    srcs = [
+        "panel-gs-cm4.c",
+    ],
+    out = "panel-gs-cm4.ko",
+    kernel_build = "//private/google-modules/soc/gs:gs_kernel_build",
+    local_defines = panel_local_defines,
+    visibility = panel_visibility,
+    deps = panel_deps,
+)
+
+ddk_module(
+    name = "panel-gs-tk4a",
+    srcs = [
+        "panel-gs-tk4a.c",
+    ],
+    out = "panel-gs-tk4a.ko",
+    kernel_build = "//private/google-modules/soc/gs:gs_kernel_build",
+    local_defines = panel_local_defines,
+    visibility = panel_visibility,
+    deps = panel_deps,
+)
+
+ddk_module(
+    name = "panel-gs-tk4b",
+    srcs = [
+        "panel-gs-tk4b.c",
+    ],
+    out = "panel-gs-tk4b.ko",
+    kernel_build = "//private/google-modules/soc/gs:gs_kernel_build",
+    local_defines = panel_local_defines,
+    visibility = panel_visibility,
+    deps = panel_deps,
+)
+
+ddk_module(
+    name = "panel-gs-tk4c",
+    srcs = [
+        "panel-gs-tk4c.c",
+    ],
+    out = "panel-gs-tk4c.ko",
+    kernel_build = "//private/google-modules/soc/gs:gs_kernel_build",
+    local_defines = panel_local_defines,
+    visibility = panel_visibility,
+    deps = panel_deps,
+)
