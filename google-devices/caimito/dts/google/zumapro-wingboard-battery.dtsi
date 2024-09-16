@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries specific to wingboard based on KM4
+ *
+ * Copyright 2023 Google,LLC
+ *
+ */
+
+ #include "zuma-komodo-battery.dtsi"

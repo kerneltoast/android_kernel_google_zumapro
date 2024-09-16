@@ -1,0 +1,115 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * zuma camera lwis device tree for tokay
+ *
+ * Copyright 2024 Google LLC.
+ *
+ */
+
+#include <dt-bindings/clock/zuma.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <arm64/exynos/exynos-pinctrl.h>
+
+/*
+ * For the tokay wingboard, only the front camera is different, others are
+ * based on komodo. So this file only changes the different parts in the komodo
+ * front camera.
+ */
+
+/ {
+	fragment@lwiscamera {
+		target-path = "/";
+		__overlay__ {
+			/* Power sequence for FRONT CAMERA combo */
+			front_camera_power_seq: module_power_seq@0 {
+				/* Power supplies will be defined on each module. */
+				/* Common supplies */
+				/* PP3200_BB_CAM pp3200_bb */
+				/* PP1350_CAM    pp1350 */
+				/* Sensor */
+				/* VDDIO         s2mpg15_ldo12 */
+				/* VDIG,VDDA     gpio1 */
+				/* RESET         reset         */
+				/* MCLK_ON       mclk_on       */
+				/* Actuator */
+				/* AF_VM         gpio2          */
+				power-up-seqs =
+					"pp3200_bb",
+					"pp1350",
+					"s2mpg15_ldo12",
+					"gpio1",
+					"gpio2",
+					"reset",
+					"mclk_on";
+				power-up-seq-types =
+					"regulator",
+					"regulator",
+					"regulator",
+					"regulator",
+					"regulator",
+					"gpio",
+					"pinctrl";
+				power-up-seq-delays-us =
+					<0
+					 0
+					 0
+					 0
+					 1000
+					 1000
+					 8000>;
+
+				power-down-seqs =
+					"mclk_off",
+					"reset",
+					"gpio2",
+					"gpio1",
+					"s2mpg15_ldo12",
+					"pp1350",
+					"pp3200_bb";
+				power-down-seq-types =
+					"pinctrl",
+					"gpio",
+					"regulator",
+					"regulator",
+					"regulator",
+					"regulator",
+					"regulator";
+				power-down-seq-delays-us =
+					<1000
+					 1000
+					 0
+					 0
+					 0
+					 7000
+					 2000>;
+			};
+
+			/* FRONT CAMERA */
+			sensor1: sensor@1 {
+				/* Device node name */
+				node-name = "sensor-dokkaebi";
+
+				/* I2C */
+				i2c-bus = <&hsi2c_3>;
+				i2c-addr = <0x10>;
+
+				/* Registers */
+				reg-addr-bitwidth = <16>;
+				reg-value-bitwidth = <16>;
+
+			};
+
+			/* EEPROM for FRONT CAMERA */
+			eeprom2: eeprom@2 {
+				/* Device node name */
+				node-name = "eeprom-smaug-dokkaebi";
+			};
+
+			/* Actuator for FRONT CAMERA */
+			actuator1: actuator@1 {
+				/* Device node name */
+				node-name = "act-cornerfolk-dokkaebi";
+			};
+		};
+	};
+};

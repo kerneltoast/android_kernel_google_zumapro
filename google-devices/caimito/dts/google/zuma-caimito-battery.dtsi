@@ -1,0 +1,107 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries for Zuma24
+ *
+ * Copyright 2022 Google LLC
+ *
+ */
+
+#include "google-dts-zuma/zuma-battery.dtsi"
+#include "google-dts-zuma/zuma-max777xx_fwupdate.dtsi"
+
+&pinctrl_0 {
+/* [MAX77729FEWN : INTB] > IF_PMIC_IRQ_L > [XEINT_22 : SC59845XWE] */
+	if_pmic_irq: if-pmic-irq {
+		samsung,pins = "gpa8-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <ZUMA_PIN_DRV_X1>;
+	};
+
+};
+
+&google_battery {
+	google,fg-psy-name = "max77779fg";
+	google,batt-voltage-critical = <3250000>;
+	google,vbatt-crit-deadline-sec = <100>;
+};
+
+&hsi2c6_bus {
+	samsung,pins = "gpp12-0", "gpp12-1";
+	samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+	samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+	samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+};
+
+&hsi2c_6 {
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	clock-frequency = <950000>;
+	pinctrl-0 = <&hsi2c6_bus>;
+
+	#include "google-dts-zuma/zuma-max777xx.dtsi"
+};
+
+#ifndef ZUMA_BMS_I2CM
+&hsi2c_10 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	clock-frequency = <400000>;
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&hsi2c10_bus>;
+
+	#include "google-dts-zuma/zuma-max777xx-eeprom.dtsi"
+};
+#else
+/* zuma-max777xx.dtsi must be included before this */
+&max77779_i2cm {
+	status = "okay";
+
+	#include "google-dts-zuma/zuma-max777xx-eeprom.dtsi"
+};
+#endif
+
+&max77729_pmic {
+	status = "disabled";
+};
+
+&max77759_fg {
+	status = "disabled";
+};
+
+&max77759_chg {
+	status = "disabled";
+};
+
+&max77779_fg {
+	status = "okay";
+};
+
+&max77779_chg {
+	status = "okay";
+	max77779,wlc-en = <&p9xxx_gpio 1 GPIO_ACTIVE_HIGH>;
+	max77779,wlc-spoof = <&p9xxx_gpio 5 GPIO_ACTIVE_HIGH>;
+	max77779,wlc-spoof-vbyp = <6>;	/* VBYP=5.3V */
+	max77779,wcin-inlim-headroom = <40000>;
+};
+
+&max77779_sp {
+	status = "okay";
+};
+
+&max77779_pmic {
+	status = "okay";
+};
+
+&max77779_vimon {
+	status = "okay";
+};
+
+&max77779_fwupdate {
+	status = "okay";
+};
+
