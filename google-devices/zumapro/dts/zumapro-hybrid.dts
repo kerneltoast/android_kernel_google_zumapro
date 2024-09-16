@@ -1,0 +1,84 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Zuma on hybrid emulator device tree source
+ *
+ * Copyright 2020-2021 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include "zumapro-emul-display.dtsi"
+
+/ {
+	board_id = <0x68000>;
+	board_rev = <0x4>;
+	fragment@boardbase {
+		target-path="/";
+		__overlay__ {
+			model = "ZUMA_PRO Hybrid based";
+			compatible = "google,ZUMA_PRO Hybrid", "google,ZUMA_PRO";
+		};
+	};
+};
+
+&exynos_ect {
+	status = "disabled";
+};
+
+&serial_0 {
+	status = "okay";
+};
+
+&mct {
+	status = "disabled";
+};
+
+&mct_v3 {
+	status = "okay";
+};
+
+/ {
+	fragment@virtio {
+		target-path = "/";
+		__overlay__ {
+			virtio_0: virtio_block@14100000 {
+				compatible = "virtio,mmio";
+				reg = <0x0 0x14100000 0x10000>;
+				interrupts = <GIC_SPI 900 IRQ_TYPE_LEVEL_HIGH 0>;
+			};
+			virtio_1: virtio_block@14110000 {
+				compatible = "virtio,mmio";
+				reg = <0x0 0x14110000 0x10000>;
+				interrupts = <GIC_SPI 901 IRQ_TYPE_LEVEL_HIGH 0>;
+			};
+			virtio_9p2000: virtio_block@14200000 {
+				compatible = "virtio,mmio";
+				reg = <0x0 0x14200000 0x10000>;
+				interrupts = <0x0 752 0x4 0>;
+				phandle = <0x1a>;
+			};
+		};
+	};
+};
+
+&chosen {
+	bootargs = "earlycon=exynos4210,mmio32,0x10870000 console=ttySAC0,115200n8 clocksource=arch_sys_counter root=/dev/ram0 rw ramdisk_size=65536 initrd=0x84000000,32M androidboot.hardware=zumapro androidboot.hardware.platform=zumapro androidboot.selinux=permissive androidboot.debug_level=0x4948 firmware_class.path=/vendor/firmware clk_ignore_unused loop.max_part=7 coherent_pool=4M no_console_suspend nokaslr softlockup_panic=1 sysrq_always_enabled maxcpus=1 androidboot.force_normal_boot=1 androidboot.slot_suffix=_a androidboot.secure_boot=NONE maxcpus=1 slub_debug=- printk.devkmsg=on nosmp cpuidle.off=1 arm64.nopauth arm64.nomte kasan=off panic_on_warm=1 drm.debug=0x17 exynos_drm.panel_name=samsung-emul";
+};
+
+/ {
+	fragment@hwrng {
+		target-path = "/";
+		__overlay__ {
+			rng: hwrng@100D0110 {
+				compatible = "timeriomem_rng";
+				reg = <0x0 0x100D0110 0x4>;
+				period = <1>;
+				quality = <100>;
+				status = "okay";
+			};
+		};
+	};
+};
+
