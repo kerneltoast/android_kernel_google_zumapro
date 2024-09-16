@@ -1,0 +1,5 @@
+# Do not inherit owners defined for carveout and dmaheap memory
+per-file zumapro-rmem.dtsi, zumapro-dma-heap.dtsi, gs101-dma-heap.dtsi, gs101-faceauth-dma-heap.dtsi = set noparent
+
+# Set owners for the carveout and dmaheap memory
+per-file zumapro-rmem.dtsi, zumapro-dma-heap.dtsi, gs101-dma-heap.dtsi, gs101-faceauth-dma-heap.dtsi = minchan@google.com, liumartin@google.com, wvw@google.com
