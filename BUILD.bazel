@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+package(
+    default_visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+exports_files([
+    # keep sorted
+    "build.config.zuma",
+    "build.config.zuma.gki.fragment",
+    "build.config.zuma_emulator",
+    "build.config.zuma_hybrid",
+    "system_dlkm.props.zuma",
+    "vendor_dlkm.blocklist.zuma",
+    "vendor_dlkm.props.zuma",
+    "vendor_dlkm_modules.zuma",
+    "vendor_kernel_boot_modules.zuma",
+    "vendor_kernel_boot_modules.zuma_zebu",
+])
