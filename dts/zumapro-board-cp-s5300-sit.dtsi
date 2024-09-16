@@ -1,0 +1,156 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Samsung CP interface device tree source
+ *
+ * Copyright (c) 2023 Samsung Electronics Co., Ltd.
+ *             http://www.samsung.com
+ */
+
+#include <dt-bindings/pinctrl/zuma.h>
+#include "google-dts-zuma/zuma-cp-s5300-sit.dtsi"
+
+/ {
+	fragment@modemif {
+		target-path = "/";
+		__overlay__ {
+			spmi_bb: s5910_bb {
+				compatible = "google,bitbang-spmi-controller";
+				status = "okay";
+				#address-cells = <1>;
+				#size-cells = <1>;
+
+				clk-gpio = <&gpa3 0 GPIO_ACTIVE_HIGH>;
+				dat-gpio = <&gpa3 1 GPIO_ACTIVE_HIGH>;
+
+				delay_us = <10>;
+
+				s5910: s5910@5 {
+					reg = <0x05 0>;
+					compatible = "google,s5910-spmi";
+
+					/*         ms   reg  val */
+					s5910,seq =
+						<   0 0x215 0x0f>,
+						<1000 0x20e 0x04>,
+						<   0 0x240 0x10>;
+				};
+			};
+
+			cpif {
+				pinctrl-names = "default";
+				pinctrl-0 = <&s5100_ap2cp_cp_pwr_on>,
+					<&s5100_ap2cp_cp_nreset_n>,
+					<&s5100_cp2ap_cp_ps_hold>,
+					<&s5100_ap2cp_wakeup>,
+					<&s5100_cp2ap_wakeup>,
+					<&s5100_ap2cp_dump_noti>,
+					<&s5100_ap2cp_pda_active>,
+					<&s5100_cp2ap_phone_active>,
+					<&s5100_ap2cp_cp_wrst_n>,
+					<&s5100_cp2ap_cp_wrst_n>,
+					<&s5100_ap2cp_pm_wrst_n>;
+
+				/* Definition of GPIOs */
+				gpio_ap2cp_wake_up =	<&gpp16 0 0x1>;
+				gpio_ap2cp_dump_noti =	<&gpp16 1 0x1>;
+				gpio_ap2cp_cp_pwr_on =	<&gpp12 2 0x1>;
+				gpio_ap2cp_pda_active =	<&gpp16 2 0x1>;
+				gpio_ap2cp_nreset_n =	<&gpp12 3 0x1>;
+				gpio_ap2cp_cp_wrst_n =	<&gpp16 3 0x1>;
+				gpio_cp2ap_cp_wrst_n =  <&gpp8 2 0x1>;
+				gpio_ap2cp_pm_wrst_n =	<&gpp8 3 0x1>;
+
+				gpio_cp2ap_phone_active = <&gpa5 2 0x1>;
+				gpio_cp2ap_cp_ps_hold =	<&gpa5 0 0x1>;
+				gpio_cp2ap_wake_up =	<&gpa5 1 0x1>;
+
+				/*
+				* The pad assignment of CP2AP_ACTIVE is not in PAD_ALIVE
+				* to be registered wake-up source. (Bug 152900487)
+				* CP2AP_ACTIVE is assigned to XEINT_17 for factor designs.
+				*/
+				mif,cp2ap_active_not_alive = <0>;
+
+				/* phandle used for shutdown calls to s5910 clk-buffer*/
+				google,clk-buffer = <&s5910>;
+			};
+		};
+	};
+};
+
+&pinctrl_2 {
+	s5100_cp2ap_wakeup: s5100_cp2ap_wakeup {
+		samsung,pins = "gpa5-1";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+	};
+
+	s5100_cp2ap_phone_active: s5100_cp2ap_phone_active {
+		samsung,pins = "gpa5-2";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_cp2ap_cp_ps_hold: s5100_cp2ap_cp_ps_hold {
+		samsung,pins = "gpa5-0";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+	};
+};
+
+&pinctrl_11 {
+	s5100_cp2ap_cp_wrst_n: s5100_cp2ap_cp_wrst_n {
+		samsung,pins = "gpp8-2";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_ap2cp_pm_wrst_n: s5100_ap2cp_pm_wrst_n {
+		samsung,pins = "gpp8-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_ap2cp_cp_nreset_n: s5100_ap2cp_cp_nreset_n {
+		samsung,pins = "gpp12-3";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_ap2cp_cp_pwr_on: s5100_ap2cp_cp_pwr_on {
+		samsung,pins = "gpp12-2";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_ap2cp_pda_active: s5100_ap2cp_pda_active {
+		samsung,pins = "gpp16-2";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_ap2cp_wakeup: s5100_ap2cp_wakeup {
+		samsung,pins = "gpp16-0";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_ap2cp_dump_noti: s5100_ap2cp_dump_noti {
+		samsung,pins = "gpp16-1";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	s5100_ap2cp_cp_wrst_n: s5100_ap2cp_cp_wrst_n {
+		samsung,pins = "gpp16-3";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+};
