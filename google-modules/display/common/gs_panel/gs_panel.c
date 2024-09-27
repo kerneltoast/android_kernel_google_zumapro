@@ -990,7 +990,7 @@ static int gs_update_status(struct backlight_device *bl)
 	if (brightness && brightness < min_brightness)
 		brightness = min_brightness;
 
-	dev_info(dev, "req: %d, br: %d\n", bl->props.brightness, brightness);
+	dev_dbg(dev, "req: %d, br: %d\n", bl->props.brightness, brightness);
 
 	mutex_lock(&ctx->mode_lock); /*TODO(b/267170999): MODE*/
 	if (ctx->base.backlight && !ctx->bl_ctrl_dcs) {
