@@ -5603,11 +5603,13 @@ int wl_android_wifi_off(struct net_device *dev, bool force_off)
 			DHD_PRINT(("%s() platform set power off is skipped due to init\n",
 				__FUNCTION__));
 		}
-#ifdef WBRC
-		wl2wbrc_wlan_off_finished();
-#endif /* WBRC */
 		g_wifi_on = FALSE;
 	}
+#ifdef WBRC
+	if (wifi_on || force_off) {
+		wl2wbrc_wlan_off_finished();
+	}
+#endif /* WBRC */
 	dhd_net_if_unlock(dev);
 
 	return ret;
