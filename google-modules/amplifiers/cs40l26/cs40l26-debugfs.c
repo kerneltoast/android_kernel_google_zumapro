@@ -11,9 +11,9 @@
 // it under the terms of the GNU General Public License version 2 as
 // published by the Free Software Foundation.
 
+#ifdef CONFIG_DEBUG_FS
 #include "cs40l26.h"
 
-#ifdef CONFIG_DEBUG_FS
 static ssize_t cs40l26_power_on_seq_read(struct file *file, char __user *user_buf,
 					size_t count, loff_t *ppos)
 {

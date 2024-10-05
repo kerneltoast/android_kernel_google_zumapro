@@ -132,7 +132,6 @@ DHDCFLAGS += \
   -DWL_P2P_USE_RANDMAC \
   -Wall \
   -Werror \
-  -Wno-parentheses-equality \
   -Wstrict-prototypes
 
 DHDCFLAGS += -DOEM_ANDROID
