@@ -1599,6 +1599,7 @@ static u8 get_acl_mode_setting(enum gs_acl_mode acl_mode)
 	 */
 
 	switch (acl_mode) {
+	default:
 	case ACL_OFF:
 		return 0x00;
 	case ACL_NORMAL:

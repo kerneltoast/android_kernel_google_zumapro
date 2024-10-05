@@ -40,7 +40,6 @@
 #include "syna_tcm2.h"
 #include "syna_tcm2_cdev.h"
 #include "syna_tcm2_platform.h"
-#include "syna_tcm2_testing_limits.h"
 #include "synaptics_touchcom_core_dev.h"
 #include "synaptics_touchcom_func_base.h"
 #include "synaptics_touchcom_func_touch.h"
