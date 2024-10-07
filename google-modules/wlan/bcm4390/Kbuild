@@ -20,6 +20,8 @@
 # <<Broadcom-WL-IPTag/Dual:>>
 #
 
+BCMDHD := 4390
+
 # Path to the module source, KERNEL_SRC is defined for out-of-tree Kbuild
 # and BCMDHD_ROOT is passed as KBUILD_OPTIONS for out-of-tree Makefile
 ifeq ($(KERNEL_SRC),)
