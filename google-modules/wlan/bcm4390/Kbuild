@@ -131,7 +131,6 @@ DHDCFLAGS += \
   -DWL_BW320MHZ \
   -DWL_P2P_USE_RANDMAC \
   -Wall \
-  -Werror \
   -Wstrict-prototypes
 
 DHDCFLAGS += -DOEM_ANDROID
