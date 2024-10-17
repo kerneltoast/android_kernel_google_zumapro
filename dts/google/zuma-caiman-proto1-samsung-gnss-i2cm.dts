@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Caiman board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#define ZUMA_BMS_I2CM 1
+#define ZUMA_BMS_PROTO_EVT10_MODEL
+#define ESIM_NO_CHIP_ENABLE_PIN
+#include "zuma-caimito-common.dtsi"
+#include "zuma-caiman-common.dtsi"
+#include "google-dts-zuma/zuma-cp-s5400-phone-gnss.dtsi"
+#include "zuma-caimito-gnss-samsung.dtsi"
+#include "zuma-caimito-wifi-4390a0.dtsi"
+
+/ {
+	board_id = <0x40902>;
+	board_rev = <0x010003>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA CAIMAN Proto 1.0 Samsung GNSS board using I2CM based on ZUMA";
+			compatible = "google,ZUMA CAIMAN", "google,ZUMA";
+		};
+	};
+};

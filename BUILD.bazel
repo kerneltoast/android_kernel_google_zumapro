@@ -1,0 +1,619 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("//aosp:modules.bzl", "get_gki_modules_list")
+load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
+load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_genrule")
+load(
+    "//build/kernel/kleaf:kernel.bzl",
+    "kernel_abi",
+    "kernel_build",
+    "kernel_images",
+    "kernel_module_group",
+    "kernel_modules_install",
+    "kernel_unstripped_modules_archive",
+    "merged_kernel_uapi_headers",
+)
+load(
+    "//private/devices/google/common:device_build_configs.bzl",
+    "device_build_configs",
+    "extracted_system_dlkm",
+    "lto_dependant_kernel_module",
+)
+
+device_build_configs(
+    name = "build.config.caimito",
+    base_build_config = ":build.config.caimito",
+    device_name = "caimito",
+)
+
+filegroup(
+    name = "gki_aarch64_boot_lz4",
+    srcs = select({
+        "//private/devices/google/common:gki_aosp": ["//aosp:kernel_aarch64_gki_artifacts_download_or_build"],
+        "//private/devices/google/common:gki_aosp_staging": ["//aosp-staging:kernel_aarch64_gki_artifacts_download_or_build"],
+    }),
+)
+
+hermetic_genrule(
+    name = "gki_aarch64_boot",
+    srcs = [":gki_aarch64_boot_lz4"],
+    outs = ["boot.img"],
+    cmd = """
+        for f in $(locations :gki_aarch64_boot_lz4); do
+            if [[ "$${f##*/}" == "boot-lz4.img" ]]; then
+                cp -L $$f $(location boot.img)
+                break
+            fi
+        done
+    """,
+)
+
+_PIXEL_MAKE_GOALS = [
+    "modules",
+    "dtbs",
+]
+
+ZUMA_SOC_REVS = [
+    "a0-foplp",
+    "a0-ipop",
+    "b0-foplp",
+    "b0-ipop",
+]
+
+ZUMAPRO_SOC_REVS = [
+    "a0-foplp",
+    "a0-ipop",
+    "a1-foplp",
+    "a1-ipop",
+]
+
+# zuma dtbo
+_ZUMA_CAIMITO_DTBOS = [
+    "google/zuma-ripcurrent24.dtbo",
+    "google/zuma-ripcurrent24-sapwood-komodo-caiman.dtbo",
+    "google/zuma-ripcurrent24-sapwood-tokay.dtbo",
+    "google/google-dts-ripcurrent/zuma-ripcurrent.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-proto1.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-proto1-wingboard.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-proto1_1.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-evt1.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-evt1_1.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-dvt1.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-pvt1.dtbo",
+    "google/google-dts-ripcurrent/zuma-husky-mp.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-proto1.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-proto1-wingboard.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-proto1_1.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-evt1.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-evt1_b0.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-evt1_1.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-evt1_1-wingboard.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-dvt1.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-pvt1.dtbo",
+    "google/google-dts-ripcurrent/zuma-shiba-mp.dtbo",
+    "google/zuma-komodo-proto1-samsung-gnss.dtbo",
+    "google/zuma-komodo-proto1-broadcom-gnss.dtbo",
+    "google/zuma-komodo-proto1-broadcom-gnss-mag3.dtbo",
+    "google/zuma-komodo-proto1_1-samsung-gnss.dtbo",
+    "google/zuma-komodo-proto1_1-broadcom-gnss.dtbo",
+    "google/zuma-komodo-proto1_1-samsung-gnss-mag3.dtbo",
+    "google/zuma-caiman-proto1-samsung-gnss.dtbo",
+    "google/zuma-caiman-proto1-samsung-gnss-i2cm.dtbo",
+    "google/zuma-caiman-proto1-broadcom-gnss.dtbo",
+    "google/zuma-caiman-proto1-broadcom-gnss-mag3.dtbo",
+    "google/zuma-caiman-proto1-broadcom-gnss-i2cm.dtbo",
+    "google/zuma-caiman-proto1_1-samsung-gnss.dtbo",
+    "google/zuma-caiman-proto1_1-broadcom-gnss.dtbo",
+    "google/zuma-caiman-proto1_1-samsung-gnss-mag3.dtbo",
+    "google/zuma-tokay-proto1-samsung-gnss.dtbo",
+    "google/zuma-tokay-proto1-broadcom-gnss.dtbo",
+    "google/zuma-tokay-proto1_1-samsung-gnss.dtbo",
+    "google/zuma-tokay-proto1_1-broadcom-gnss.dtbo",
+]
+
+_ZUMA_CAIMITO_DPM_DTBOS = [
+    "google/google-dts-zuma/zuma-dpm-eng.dtbo",
+    "google/google-dts-zuma/zuma-dpm-userdebug.dtbo",
+    "google/google-dts-zuma/zuma-dpm-user.dtbo",
+]
+
+# zumapro dtbo
+_ZUMAPRO_CAIMITO_DTBOS = [
+    "google/zumapro-ripcurrentpro.dtbo",
+    "google/zumapro-ripcurrentpro-sapwood-komodo-caiman.dtbo",
+    "google/zumapro-komodo-evt1-broadcom-gnss.dtbo",
+    "google/zumapro-komodo-evt1-samsung-gnss.dtbo",
+    "google/zumapro-komodo-evt1-broadcom-gnss-mag3.dtbo",
+    "google/zumapro-komodo-evt1-samsung-gnss-mag3.dtbo",
+    "google/zumapro-komodo-evt1-wingboard.dtbo",
+    "google/zumapro-komodo-evt1_1-broadcom-gnss.dtbo",
+    "google/zumapro-komodo-evt1_1-samsung-gnss.dtbo",
+    "google/zumapro-komodo-evt1_1-wingboard.dtbo",
+    "google/zumapro-komodo-dvt1.dtbo",
+    "google/zumapro-komodo-dvt1-wingboard.dtbo",
+    "google/zumapro-komodo-pvt1.dtbo",
+    "google/zumapro-komodo-mp.dtbo",
+    "google/zumapro-caiman-evt1-broadcom-gnss.dtbo",
+    "google/zumapro-caiman-evt1-samsung-gnss.dtbo",
+    "google/zumapro-caiman-evt1-broadcom-gnss-mag3.dtbo",
+    "google/zumapro-caiman-evt1-samsung-gnss-mag3.dtbo",
+    "google/zumapro-caiman-evt1-wingboard.dtbo",
+    "google/zumapro-caiman-evt1-broadcom-gnss-i2cm.dtbo",
+    "google/zumapro-caiman-evt1-samsung-gnss-i2cm.dtbo",
+    "google/zumapro-caiman-evt1_1-broadcom-gnss.dtbo",
+    "google/zumapro-caiman-evt1_1-samsung-gnss.dtbo",
+    "google/zumapro-caiman-evt1_1-wingboard.dtbo",
+    "google/zumapro-caiman-dvt1.dtbo",
+    "google/zumapro-caiman-dvt1-i2cm.dtbo",
+    "google/zumapro-caiman-dvt1-wingboard.dtbo",
+    "google/zumapro-caiman-pvt1.dtbo",
+    "google/zumapro-caiman-mp.dtbo",
+    "google/zumapro-tokay-evt1-broadcom-gnss.dtbo",
+    "google/zumapro-tokay-evt1-samsung-gnss.dtbo",
+    "google/zumapro-tokay-evt1-wingboard.dtbo",
+    "google/zumapro-tokay-evt1_1-broadcom-gnss.dtbo",
+    "google/zumapro-tokay-evt1_1-samsung-gnss.dtbo",
+    "google/zumapro-tokay-evt1_1-wingboard.dtbo",
+    "google/zumapro-tokay-dvt1.dtbo",
+    "google/zumapro-tokay-dvt1-wingboard.dtbo",
+    "google/zumapro-tokay-pvt1.dtbo",
+    "google/zumapro-tokay-mp.dtbo",
+]
+
+_ZUMAPRO_CAIMITO_DPM_DTBOS = [
+    "google/google-dts-zumapro/zumapro-dpm-eng.dtbo",
+    "google/google-dts-zumapro/zumapro-dpm-userdebug.dtbo",
+    "google/google-dts-zumapro/zumapro-dpm-user.dtbo",
+]
+
+kernel_module_group(
+    name = "caimito_ext_modules",
+    srcs = [
+        # keep sorted
+        "//private/devices/google/caimito:zumapro_soc.caimito",
+        "//private/google-modules/amplifiers/audiometrics",
+        "//private/google-modules/amplifiers/cs35l41",
+        "//private/google-modules/amplifiers/cs40l26",
+        "//private/google-modules/amplifiers/snd_soc_wm_adsp:snd-soc-wm-adsp",
+        "//private/google-modules/aoc",
+        "//private/google-modules/aoc/alsa",
+        "//private/google-modules/aoc/usb:aoc.usb",
+        "//private/google-modules/bluetooth/broadcom:bluetooth.broadcom",
+        "//private/google-modules/bms",
+        "//private/google-modules/bms/misc:bms-misc",
+        "//private/google-modules/display/common/gs_drm",
+        "//private/google-modules/display/common/gs_panel",
+        "//private/google-modules/display/common/panels",
+        "//private/google-modules/display/panels/caimito:panel-gs-cm4",
+        "//private/google-modules/display/panels/caimito:panel-gs-km4",
+        "//private/google-modules/display/panels/caimito:panel-gs-tk4a",
+        "//private/google-modules/display/panels/caimito:panel-gs-tk4b",
+        "//private/google-modules/display/panels/caimito:panel-gs-tk4c",
+        "//private/google-modules/display/samsung:display.samsung",
+        "//private/google-modules/edgetpu/rio/drivers/edgetpu:edgetpu.rio",
+        "//private/google-modules/fingerprint/fpc",
+        "//private/google-modules/fingerprint/qcom/qfs4008:qbt_handler",
+        "//private/google-modules/gps/broadcom/bcm47765",
+        "//private/google-modules/gpu/mali_kbase",
+        "//private/google-modules/gpu/mali_pixel",
+        "//private/google-modules/gxp/zuma:gxp",
+        "//private/google-modules/hdcp/samsung:hdcp.samsung",
+        "//private/google-modules/lwis",
+        "//private/google-modules/misc/sscoredump",
+        "//private/google-modules/nfc",
+        "//private/google-modules/power/mitigation:bcl",
+        "//private/google-modules/power/reset",
+        "//private/google-modules/radio/samsung/s5400:cpif",
+        "//private/google-modules/sensors/hall_sensor",
+        "//private/google-modules/touch/common:touch.common",
+        "//private/google-modules/touch/fts/ftm5",
+        "//private/google-modules/touch/goodix",
+        "//private/google-modules/touch/sec",
+        "//private/google-modules/touch/synaptics/syna_gtd:syna_touch",
+        "//private/google-modules/trusty",
+        "//private/google-modules/uwb/qorvo/qm35/qm35s:uwb.qm35",
+        "//private/google-modules/video/gchips:video.gchips",
+        "//private/google-modules/wlan/bcm4390:bcmdhd4390",
+        "//private/google-modules/wlan/wlan_ptracker",
+    ],
+)
+
+kernel_build(
+    name = "zumapro_caimito",
+    srcs = glob([
+        "build.config.*",
+        "dts/**",
+        "caimito*.fragment",
+    ]) + [
+        # keep sorted
+        "//private/devices/google/common:debug_build_configs",
+        "//private/devices/google/zumapro:build.config.zumapro",
+        "//private/google-modules/bms/misc:bms-misc.kconfig",
+        "//private/google-modules/display/common:common.kconfig",
+        "//private/google-modules/display/samsung:display.samsung.kconfig",
+        "//private/google-modules/fingerprint/qcom/qfs4008:qbt_handler.kconfig",
+        "//private/google-modules/power/mitigation:bcl.kconfig",
+        "//private/google-modules/power/reset:reset.kconfig",
+        "//private/google-modules/radio/samsung/s5300:cpif.kconfig",
+        "//private/google-modules/radio/samsung/s5400:cpif.kconfig",
+        "//private/google-modules/soc/gs:gs_soc.kconfig",
+        "//private/google-modules/touch/common:touch.common.kconfig",
+        "//private/google-modules/touch/fts/ftm5:ftm5.kconfig",
+        "//private/google-modules/touch/sec:sec.kconfig",
+        "//private/google-modules/trusty:trusty.kconfig",
+        "//private/google-modules/wlan/wlan_ptracker:wlan_ptracker.kconfig",
+    ] + select({
+        "//private/devices/google/common:gki_aosp": ["//aosp:kernel_aarch64_sources"],
+        "//private/devices/google/common:gki_aosp_staging": ["//aosp-staging:kernel_aarch64_sources"],
+    }),
+    outs = ["google/google-dts-zuma/zuma-{}.dtb".format(soc_rev) for soc_rev in ZUMA_SOC_REVS] +
+           ["google/google-dts-zumapro/zumapro-{}.dtb".format(soc_rev) for soc_rev in ZUMAPRO_SOC_REVS] +
+           _ZUMA_CAIMITO_DTBOS + _ZUMAPRO_CAIMITO_DTBOS +
+           _ZUMA_CAIMITO_DPM_DTBOS + _ZUMAPRO_CAIMITO_DPM_DTBOS,
+    # TODO(b/221278445): Use real GKI
+    base_kernel = select({
+        "//private/devices/google/common:gki_aosp": "//aosp:kernel_aarch64_download_or_build",
+        "//private/devices/google/common:gki_aosp_staging": "//aosp-staging:kernel_aarch64_download_or_build",
+    }),
+    build_config = ":device_build_config",
+    collect_unstripped_modules = True,
+    defconfig_fragments = select({
+        "//private/devices/google/common:kunit_enabled": ["kunit_defconfig"],
+        "//conditions:default": [],
+    }),
+    dtstree = "//private/devices/google/caimito/dts:caimito.dt",
+    kconfig_ext = "//private/google-modules/soc/gs:Kconfig.ext",
+    kmi_symbol_list = select({
+        "//private/devices/google/common:gki_aosp": "//aosp:android/abi_gki_aarch64_pixel",
+        "//private/devices/google/common:gki_aosp_staging": "//aosp-staging:android/abi_gki_aarch64_pixel",
+    }),
+    make_goals = _PIXEL_MAKE_GOALS,
+    module_outs = [
+        # keep sorted
+        "drivers/gpu/drm/display/drm_display_helper.ko",
+        "drivers/i2c/i2c-dev.ko",
+        "drivers/misc/eeprom/at24.ko",
+        "drivers/misc/open-dice.ko",
+        "drivers/perf/arm-cmn.ko",
+        "drivers/perf/arm_dsu_pmu.ko",
+        "drivers/scsi/sg.ko",
+        "drivers/spi/spidev.ko",
+        "drivers/watchdog/softdog.ko",
+        "net/mac80211/mac80211.ko",
+        "net/wireless/cfg80211.ko",
+    ],
+    strip_modules = True,
+)
+
+kernel_abi(
+    name = "zumapro_caimito_abi",
+    kernel_build = ":zumapro_caimito",
+    kernel_modules = [":caimito_ext_modules"],
+    kmi_symbol_list_add_only = True,
+    module_grouping = False,
+)
+
+lto_dependant_kernel_module(
+    name = "zumapro_soc.caimito",
+    srcs = [
+        "//private/google-modules/soc/gs:gs_soc_sources",
+        "//private/google-modules/trusty:headers",
+    ],
+    outs = [
+        # keep sorted
+        "drivers/block/zram/zcomp_cpu.ko",
+        "drivers/block/zram/zcomp_eh.ko",
+        "drivers/block/zram/zram_gs.ko",
+        "drivers/bts/bts.ko",
+        "drivers/clk/gs/clk_exynos_gs.ko",
+        "drivers/clocksource/exynos_mct_v3.ko",
+        "drivers/cpufreq/exynos-acme.ko",
+        "drivers/devfreq/google/exynos_devfreq.ko",
+        "drivers/dma-buf/heaps/samsung/samsung_dma_heap.ko",
+        "drivers/dma/pl330.ko",
+        "drivers/dma/samsung-dma.ko",
+        "drivers/gpu/exynos/g2d/g2d.ko",
+        "drivers/i2c/busses/i2c-acpm.ko",
+        "drivers/i2c/busses/i2c-exynos5.ko",
+        "drivers/iio/power/odpm.ko",
+        "drivers/input/fingerprint/goodixfp.ko",
+        "drivers/input/keyboard/s2mpg14-key.ko",
+        "drivers/input/keycombo.ko",
+        "drivers/input/keydebug.ko",
+        "drivers/input/misc/vl53l1/stmvl53l1.ko",
+        "drivers/iommu/exynos-pcie-iommu.ko",
+        "drivers/iommu/iovad-best-fit-algo.ko",
+        "drivers/iommu/samsung-iommu-group.ko",
+        "drivers/iommu/samsung-secure-iova.ko",
+        "drivers/iommu/samsung_iommu_v9.ko",
+        "drivers/media/platform/exynos/mfc/exynos_mfc.ko",
+        "drivers/media/platform/exynos/smfc/smfc.ko",
+        "drivers/mfd/s2mpg14-mfd.ko",
+        "drivers/mfd/s2mpg1415-gpio.ko",
+        "drivers/mfd/s2mpg15-mfd.ko",
+        "drivers/mfd/slg51002-core.ko",
+        "drivers/misc/s5910/s5910.ko",
+        "drivers/misc/sbb-mux/sbb-mux.ko",
+        "drivers/misc/sscoredump/sscoredump.ko",
+        "drivers/pci/controller/dwc/pcie-exynos-gs.ko",
+        "drivers/pci/controller/dwc/pcie-exynos-zuma-rc-cal.ko",
+        "drivers/performance/gs_perf_mon/gs_perf_mon.ko",
+        "drivers/performance/lat_governors/gs_governor_dsulat.ko",
+        "drivers/performance/lat_governors/gs_governor_memlat.ko",
+        "drivers/performance/lat_governors/gs_governor_utils.ko",
+        "drivers/phy/samsung/eusb_repeater.ko",
+        "drivers/phy/samsung/phy-exynos-mipi.ko",
+        "drivers/phy/samsung/phy-exynos-mipi-dsim.ko",
+        "drivers/phy/samsung/phy-exynos-usbdrd-eusb-super.ko",
+        "drivers/pinctrl/gs/pinctrl-exynos-gs.ko",
+        "drivers/pinctrl/pinctrl-slg51002.ko",
+        "drivers/power/reset/debug-reboot.ko",
+        "drivers/regulator/pmic_class.ko",
+        "drivers/regulator/rt6160-regulator.ko",
+        "drivers/regulator/s2mpg14-powermeter.ko",
+        "drivers/regulator/s2mpg14-regulator.ko",
+        "drivers/regulator/s2mpg15-powermeter.ko",
+        "drivers/regulator/s2mpg15-regulator.ko",
+        "drivers/regulator/slg51002-regulator.ko",
+        "drivers/rtc/rtc-s2mpg14.ko",
+        "drivers/soc/google/acpm/acpm_flexpmu_dbg.ko",
+        "drivers/soc/google/acpm/acpm_mbox_test.ko",
+        "drivers/soc/google/acpm/gs_acpm.ko",
+        "drivers/soc/google/acpm/power_stats.ko",
+        "drivers/soc/google/bcm_dbg.ko",
+        "drivers/soc/google/cal-if/cmupmucal.ko",
+        "drivers/soc/google/dbgcore-dump.ko",
+        "drivers/soc/google/debug/bookerci.ko",
+        "drivers/soc/google/debug/debug-snapshot-debug-kinfo.ko",
+        "drivers/soc/google/debug/dss.ko",
+        "drivers/soc/google/debug/ehld.ko",
+        "drivers/soc/google/debug/exynos-adv-tracer.ko",
+        "drivers/soc/google/debug/exynos-adv-tracer-s2d.ko",
+        "drivers/soc/google/debug/exynos-coresight.ko",
+        "drivers/soc/google/debug/exynos-coresight-etm.ko",
+        "drivers/soc/google/debug/exynos-debug-test.ko",
+        "drivers/soc/google/debug/exynos-ecc-handler.ko",
+        "drivers/soc/google/debug/itmon.ko",
+        "drivers/soc/google/debug/pixel-boot-metrics.ko",
+        "drivers/soc/google/debug/pixel-debug-test.ko",
+        "drivers/soc/google/debug/pixel-suspend-diag.ko",
+        "drivers/soc/google/debug/sjtag-driver.ko",
+        "drivers/soc/google/ect_parser.ko",
+        "drivers/soc/google/eh/eh.ko",
+        "drivers/soc/google/exynos-bcm_dbg-dump.ko",
+        "drivers/soc/google/exynos-cpuhp.ko",
+        "drivers/soc/google/exynos-cpupm.ko",
+        "drivers/soc/google/exynos-dm.ko",
+        "drivers/soc/google/exynos-pd.ko",
+        "drivers/soc/google/exynos-pd-dbg.ko",
+        "drivers/soc/google/exynos-pd_el3.ko",
+        "drivers/soc/google/exynos-pd_hsi0.ko",
+        "drivers/soc/google/exynos-pm.ko",
+        "drivers/soc/google/exynos-pmu-if.ko",
+        "drivers/soc/google/exynos-seclog.ko",
+        "drivers/soc/google/exynos_pm_qos.ko",
+        "drivers/soc/google/gcma/gcma.ko",
+        "drivers/soc/google/gnssif_spi/gnss_spi.ko",
+        "drivers/soc/google/gnssif_spi/gnssif.ko",
+        "drivers/soc/google/gs-chipid.ko",
+        "drivers/soc/google/gsa/gsa.ko",
+        "drivers/soc/google/gsa/gsa_gsc.ko",
+        "drivers/soc/google/hardlockup-debug.ko",
+        "drivers/soc/google/hardlockup-watchdog.ko",
+        "drivers/soc/google/pa_kill/pa_kill.ko",
+        "drivers/soc/google/perf_trace_counters.ko",
+        "drivers/soc/google/pixel_stat/mm/pixel_stat_mm.ko",
+        "drivers/soc/google/pixel_stat/pixel_stat_sysfs.ko",
+        "drivers/soc/google/pkvm-s2mpu/pkvm-s2mpu-v9/pkvm-s2mpu-v9.ko",
+        "drivers/soc/google/pt/slc_acpm.ko",
+        "drivers/soc/google/pt/slc_dummy.ko",
+        "drivers/soc/google/pt/slc_pmon.ko",
+        "drivers/soc/google/pt/slc_pt.ko",
+        "drivers/soc/google/vh/kernel/cgroup/vh_cgroup.ko",
+        "drivers/soc/google/vh/kernel/fs/vh_fs.ko",
+        "drivers/soc/google/vh/kernel/metrics/pixel_metrics.ko",
+        "drivers/soc/google/vh/kernel/mm/vh_mm.ko",
+        "drivers/soc/google/vh/kernel/pixel_em/pixel_em.ko",
+        "drivers/soc/google/vh/kernel/sched/sched_tp.ko",
+        "drivers/soc/google/vh/kernel/sched/vh_preemptirq_long.ko",
+        "drivers/soc/google/vh/kernel/sched/vh_sched.ko",
+        "drivers/soc/google/vh/kernel/systrace.ko",
+        "drivers/soc/google/vh/kernel/thermal/vh_thermal.ko",
+        "drivers/spi/spi-s3c64xx.ko",
+        "drivers/spmi/spmi_bit_bang.ko",
+        "drivers/thermal/google/s2mpg15_spmic_thermal.ko",
+        "drivers/thermal/samsung/gpu_cooling.ko",
+        "drivers/thermal/samsung/gs_thermal.ko",
+        "drivers/tty/serial/exynos_tty.ko",
+        "drivers/ufs/ufs-exynos-gs.ko",
+        "drivers/usb/dwc3/dwc3-exynos-usb.ko",
+        "drivers/usb/gadget/function/usb_f_dm.ko",
+        "drivers/usb/gadget/function/usb_f_dm1.ko",
+        "drivers/usb/gadget/function/usb_f_etr_miu.ko",
+        "drivers/usb/gadget/function/usb_f_rndis.ko",
+        "drivers/usb/host/xhci-exynos.ko",
+        "drivers/usb/typec/tcpm/google/bc_max77759.ko",
+        "drivers/usb/typec/tcpm/google/google_tcpci_shim.ko",
+        "drivers/usb/typec/tcpm/google/max77759_contaminant.ko",
+        "drivers/usb/typec/tcpm/google/max77759_helper.ko",
+        "drivers/usb/typec/tcpm/google/max77779_contaminant.ko",
+        "drivers/usb/typec/tcpm/google/max777x9_contaminant.ko",
+        "drivers/usb/typec/tcpm/google/tcpci_max77759.ko",
+        "drivers/usb/typec/tcpm/google/usb_psy.ko",
+        "drivers/usb/typec/tcpm/google/usbc_cooling_dev.ko",
+        "drivers/watchdog/s3c2410_wdt.ko",
+    ],
+    kernel_build = "//private/google-modules/soc/gs:gs_kernel_build",
+    lto_outs = [
+        "drivers/ufs/ufs-pixel-fips140.ko",
+    ],
+    makefile = ["//private/google-modules/soc/gs:Makefile"],
+    test_outs = [
+        # TODO(b/323263169) enable this.
+        # "drivers/soc/google/gsa/gsa_test.ko"
+    ],
+    visibility = [
+        # keep sorted
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules:__subpackages__",
+    ],
+    deps = [
+        "//private/google-modules/bms/misc:bms-misc",
+        "//private/google-modules/trusty",
+    ],
+)
+
+kernel_modules_install(
+    name = "zumapro_caimito_modules_install",
+    kernel_build = ":zumapro_caimito",
+    kernel_modules = [":caimito_ext_modules"],
+)
+
+merged_kernel_uapi_headers(
+    name = "zumapro_caimito_merged_uapi_headers",
+    kernel_build = ":zumapro_caimito",
+    kernel_modules = [":caimito_ext_modules"],
+)
+
+kernel_unstripped_modules_archive(
+    name = "zumapro_caimito_unstripped_modules_archive",
+    kernel_build = ":zumapro_caimito",
+    kernel_modules = [":caimito_ext_modules"],
+)
+
+hermetic_genrule(
+    name = "vendor_kernel_boot_modules.caimito-cat",
+    srcs = [
+        "vendor_kernel_boot_modules.caimito",
+        "//private/devices/google/zumapro:vendor_kernel_boot_modules.zumapro",
+    ],
+    outs = [
+        "vendor_kernel_boot_modules.concat",
+    ],
+    cmd = """
+        cat $(location vendor_kernel_boot_modules.caimito) \\
+            $(location //private/devices/google/zumapro:vendor_kernel_boot_modules.zumapro) \\
+            > $@
+    """,
+)
+
+# Don't load the zram GKI module
+_GKI_MODULES = [m for m in get_gki_modules_list("arm64") if not m.endswith("zram.ko")]
+
+write_file(
+    name = "system_dlkm_modules_list",
+    out = "system_dlkm_modules_list.caimito",
+    content = _GKI_MODULES,
+)
+
+kernel_images(
+    name = "zumapro_caimito_images",
+    base_kernel_images = select({
+        "//private/devices/google/common:gki_aosp": "//aosp:kernel_aarch64_images_download_or_build",
+        "//private/devices/google/common:gki_aosp_staging": "//aosp-staging:kernel_aarch64_images_download_or_build",
+    }),
+    boot_image_outs = ["dtb.img"],
+    build_boot = False,
+    build_dtbo = True,
+    build_initramfs = True,
+    build_system_dlkm = True,
+    build_vendor_dlkm = True,
+    build_vendor_kernel_boot = True,
+    dedup_dlkm_modules = True,
+    dtbo_srcs = [":zumapro_caimito/" + file for file in _ZUMA_CAIMITO_DTBOS] +
+                [":zumapro_caimito/" + file for file in _ZUMAPRO_CAIMITO_DTBOS],
+    kernel_build = ":zumapro_caimito",
+    kernel_modules_install = ":zumapro_caimito_modules_install",
+    # Keep the following in sync with build.config.caimito:
+    modules_list = ":vendor_kernel_boot_modules.caimito-cat",
+    system_dlkm_modules_list = ":system_dlkm_modules_list",
+    system_dlkm_props = "//private/devices/google/zuma:system_dlkm.props.zuma",
+    vendor_dlkm_etc_files = ["//private/devices/google/caimito:insmod_cfgs"],
+    vendor_dlkm_modules_blocklist = "//private/devices/google/zumapro:vendor_dlkm.blocklist.zumapro",
+    # No MODULES_BLOCKLIST
+    vendor_dlkm_modules_list = "//private/devices/google/zumapro:vendor_dlkm_modules.zumapro",
+    vendor_dlkm_props = "//private/devices/google/zumapro:vendor_dlkm.props.zumapro",
+    deps = [
+        # Keep the following in sync with (vendor|system)_dlkm.props.zumapro:
+        # selinux_fc
+        "//prebuilts/boot-artifacts/selinux:file_contexts",
+        "//prebuilts/boot-artifacts/selinux:system_file_contexts",
+    ],
+)
+
+filegroup(
+    name = "insmod_cfgs",
+    srcs = glob([
+        "insmod_cfg/*.cfg",
+    ]),
+)
+
+# TODO: support running ufdt_apply_overlay in a loop on each DTBO
+#genrule(
+#    name = "zumapro_caimito_ufdt_overlay",
+#    srcs = [
+#        ":zumapro_caimito/google/zuma-a0.dtb",
+#        "//build/kernel:hermetic-tools/ufdt_apply_overlay",
+#    ] + [":zumapro_caimito/" + file for file in _ZUMAPRO_CAIMITO_DTBOS],
+#    outs = [
+#        "zumapro_caimito-out.dtb",
+#    ],
+#    cmd = """set -e
+#	for m in {caimito_dtbos}; \\
+#	do \\
+#		$(location //build/kernel:hermetic-tools/ufdt_apply_overlay) \\
+#		    $(location :zumapro_caimito/google/zuma-a0.dtb)              \\
+#		    $(location :zumapro_caimito/$$m)         \\
+#		    $(location zumapro_caimito-$(basename $$m).dtb) \\
+#	done
+#    """.format(
+#        caimito_dtbos = " ".join(_ZUMAPRO_CAIMITO_DTBOS),
+#    ),
+#)
+
+_zumapro_caimito_dist_targets = [
+    # Device-specific artifacts
+    ":zumapro_caimito",
+    ":zumapro_caimito_modules_install",
+    ":zumapro_caimito_merged_uapi_headers",
+    ":zumapro_caimito_images",
+    ":gki_aarch64_boot",
+    # TODO: support running ufdt_apply_overlay in a loop on each DTBO
+    #":zumapro_caimito_ufdt_overlay",
+    ":zumapro_caimito_unstripped_modules_archive",
+    ":insmod_cfgs",
+    ":zuma_caimito_extracted_system_dlkm",
+] + select({
+    "//private/devices/google/common:gki_aosp": [
+        "//aosp:android/abi_gki_aarch64_pixel",
+        "//aosp:kernel_aarch64_download_or_build",
+        "//aosp:kernel_aarch64_headers_download_or_build",
+    ],
+    "//private/devices/google/common:gki_aosp_staging": [
+        "//aosp-staging:android/abi_gki_aarch64_pixel",
+        "//aosp-staging:kernel_aarch64_download_or_build",
+        "//aosp-staging:kernel_aarch64_headers_download_or_build",
+    ],
+}) + select({
+    "//private/devices/google/common:enable_download_fips140": ["@gki_prebuilt_fips140//fips140.ko"],
+    "//private/devices/google/common:disable_download_fips140": [],
+})
+
+extracted_system_dlkm(
+    name = "zuma_caimito_extracted_system_dlkm",
+    gki_modules = [paths.basename(m) for m in _GKI_MODULES],
+    images = select({
+        "//private/devices/google/common:gki_aosp": "//aosp:kernel_aarch64_images_download_or_build",
+        "//private/devices/google/common:gki_aosp_staging": "//aosp-staging:kernel_aarch64_images_download_or_build",
+    }),
+)
+
+copy_to_dist_dir(
+    name = "zumapro_caimito_dist",
+    data = _zumapro_caimito_dist_targets,
+    dist_dir = "out/caimito/dist",
+    flat = True,
+    log = "info",
+)

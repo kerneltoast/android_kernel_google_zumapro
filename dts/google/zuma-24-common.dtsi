@@ -1,0 +1,34 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Zuma24 board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+#include "google-dts-zuma/zuma-common.dtsi"
+
+#include "google-dts-ripcurrent/zuma-ripcurrent-battery.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-camera-pmic.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-camera.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-display.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-gsa-gsc.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-pmic.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-touch.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-usb.dtsi"
+#include "google-dts-zuma/zuma-board-wlan.dtsi"
+#include "zuma-ripcurrent-cp-s5400-sit.dtsi"
+#include "google-dts-zuma/zuma-board-bluetooth.dtsi"
+#include "google-dts-zuma/zuma-board-ese.dtsi"
+#include "google-dts-zuma/zuma-board-nfc.dtsi"
+#include "google-dts-zuma/zuma-board-udfps.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-audio.dtsi"
+#include "google-dts-zuma/zuma-board-pcie.dtsi"
+#include "google-dts-zuma/zuma-board-pcie-cp-s5400-a0.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-haptics.dtsi"
+#include "google-dts-zuma/zuma-board-uwb.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-thermal.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-sbbm.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-bluetooth.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-bluetooth-offmode.dtsi"
+#include "google-dts-zuma/zuma-typec.dtsi"
+
