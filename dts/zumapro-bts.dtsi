@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * SAMSUNG EXYNOS SoC BTS device tree source
+ *
+ * Copyright (c) 2023 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com
+ *
+ * SAMSUNG EXYNOS SoC BTS device nodes are listed in this file.
+ * EXYNOS based board files should include this file.
+ *
+ */
+
+#include "google-dts-zuma/zuma-bts.dtsi"
+
+/ {
+	exynos-bts {
+		/* BUS1 to INT mapping table */
+		bus1_int_map = <
+			/*
+			 * bus1     int
+			 *  clk     clk
+			 * -------------
+			 */
+			620000    1066000
+			533000    664000
+			400000    533000
+			267000    356000
+			200000    200000
+			134000    178000
+		>;
+	};
+};

@@ -1,0 +1,492 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Google Zumapro specific bcl device tree source
+ *
+ * Copyright (c) 2024 Google, LLC
+ *		https://www.google.com
+ */
+
+#include <dt-bindings/thermal/thermal.h>
+#include <dt-bindings/soc/google/zumapro-bcl.h>
+
+/ {
+	fragment@battery {
+		target-path = "/";
+		__overlay__ {
+			google_mitigation: google,mitigation {
+				compatible = "google,google-bcl";
+				#thermal-sensor-cells = <1>;
+				google,charger = <&max77779_chg>;
+				google,pmic = <&max77779_pmic>;
+				google,power-supply = <&max77779_fg>;
+				google,vimon = <&max77779_vimon>;
+				google,main-power = <&s2mpg14mfd>;
+				google,sub-power = <&s2mpg15mfd>;
+				ppm_settings = <0>;
+				lit_mpmm_settings = <0x1AA>;
+				mid_mpmm_settings = <0x1AA>;
+				big_mpmm_settings = <0x6>;
+				mpmm_en = <0x1f0>;
+				tpu_con_heavy = <0xfff041c1>;
+				tpu_con_light = <0xfff041c1>;
+				tpu_clkdivstep = <0x41>;
+				gpu_con_heavy = <0xfff04381>;
+				gpu_con_light = <0xfff041c1>;
+				gpu_clkdivstep = <0x41>;
+				cpu2_clkdivstep = <0x41>;
+				cpu1_clkdivstep = <0x41>;
+				cpu0_clkdivstep = <0x41>;
+				aur_clkdivstep = <0x1>;
+				batoilo_lower = <1800>;
+				batoilo_upper = <8000>;
+				batoilo2_lower = <3800>;
+				batoilo2_upper = <10000>;
+				batoilo_wlc_trig_lvl = <5200>;
+				batoilo2_wlc_trig_lvl = <7000>;
+				batoilo_trig_lvl = <5000>;
+				batoilo2_trig_lvl = <8000>;
+				batoilo_bat_open_to = <0x8>;    /* 36ms */
+				batoilo2_bat_open_to = <0x3>;   /* 12ms */
+				batoilo_rel = <0x2>;   /* 1ms */
+				batoilo2_rel = <0x2>;   /* 1ms */
+				batoilo_det = <0x0>;   /* 0ms */
+				batoilo2_det = <0x0>;   /* 0ms */
+				uvlo1_rel = <0x2>;   /* 10ms */
+				uvlo2_rel = <0x2>;   /* 10ms */
+				uvlo1_det = <0x1>;   /* 30us */
+				uvlo2_det = <0x1>;   /* 30us */
+				evt_cnt_enable = <0x1>;
+				evt_cnt_rate = <0x0>;   /* 16k */
+				cpu0_cluster = <0>;
+				cpu1_cluster = <4>;
+				cpu2_cluster = <7>;
+				smpl_ctrl = <0x8F>; /* 3.0V, 200mV HYS, 158us Debounce */
+				odpm_ratio = <3>;
+				non_monitored_module_ids = <AUDIO_MITIGATION_ID HAPTICS_MITIGATION_ID>;
+
+				irq_config {
+					irq,uvlo1;
+					irq,uvlo2;
+					irq,batoilo;
+					irq,batoilo2;
+					irq,smpl_warn;
+					/* Disabled IRQ
+					* irq,ocp_cpu1;
+					* irq,ocp_cpu2;
+					* irq,ocp_tpu;
+					* irq,ocp_gpu;
+					* irq,soft_ocp_cpu1;
+					* irq,soft_ocp_cpu2;
+					* irq,soft_ocp_tpu;
+					* irq,soft_ocp_gpu;
+					*/
+				};
+				main_limit {
+					pmic = "main_limit";
+					ch1 { setting = <255>; };
+					ch2 { setting = <255>; };
+					ch3 { setting = <222>; };
+					ch4 { setting = <251>; };
+					ch5 { setting = <181>; };
+					ch6 { setting = <126>; };
+					ch7 { setting = <255>; };
+					ch8 { setting = <105>; };
+					ch9 { setting = <224>; };
+					ch10 { setting = <207>; };
+					ch11 { setting = <83>; };
+					ch12 { setting = <83>; };
+				};
+				sub_limit {
+					pmic = "sub_limit";
+					ch1 { setting = <106>; };
+					ch2 { setting = <180>; };
+					ch3 { setting = <151>; };
+					ch4 { setting = <36>; };
+					ch5 { setting = <51>; };
+					ch6 { setting = <56>; };
+					ch7 { setting = <253>; };
+					ch8 { setting = <126>; };
+					ch9 { setting = <195>; };
+					ch10 { setting = <125>; };
+					ch11 { setting = <166>; };
+					ch12 { setting = <166>; };
+				};
+				main_mitigation {
+					ch1 {
+						module_id = <MIF_MITIGATION_ID>;
+						threshold = <145600>; // ODPM LPF RAW
+					};
+					ch2 {
+						module_id = <CPU_MID_MITIGATION_ID>;
+						threshold = <109200>;
+					};
+					ch3 {
+						module_id = <CPU_BIG_MITIGATION_ID>;
+						threshold = <97067>;
+					};
+					ch4 {
+						module_id = <CPU_LITTLE_MITIGATION_ID>;
+						threshold = <72800>;
+					};
+					ch5 {
+						module_id = <INT_MITIGATION_ID>;
+						threshold = <72800>;
+					};
+					ch6 {
+						module_id = <LDO_MITIGATION_ID>;
+						threshold = <218400>;
+					};
+					ch7 {
+						module_id = <TPU_MITIGATION_ID>;
+						threshold = <72800>;
+					};
+					ch8 {
+						module_id = <LDO_MITIGATION_ID>;
+						threshold = <218400>;
+					};
+					ch9 {
+						module_id = <CPU_MID_MITIGATION_ID>;
+						threshold = <218400>;
+					};
+					ch10 {
+						module_id = <DISPLAY_MITIGATION_ID>;
+						threshold = <107321>;
+					};
+					ch11 {
+						module_id = <CAMERA_MITIGATION_ID>;
+						threshold = <107321>;
+					};
+					ch12 {
+						module_id = <CELLULAR_MITIGATION_ID>;
+						threshold = <107321>;
+					};
+				};
+				sub_mitigation {
+					ch1 {
+						module_id = <CAMERA_MITIGATION_ID>;
+						threshold = <109200>; // ODPM LPF RAW
+					};
+					ch2 {
+						module_id = <GPU_MITIGATION_ID>;
+						threshold = <145600>;
+					};
+					ch3 {
+						module_id = <DDR_MITIGATION_ID>;
+						threshold = <145600>;
+					};
+					ch4 {
+						module_id = <DDR_MITIGATION_ID>;
+						threshold = <145600>;
+					};
+					ch5 {
+						module_id = <GPU_MITIGATION_ID>;
+						threshold = <145600>;
+					};
+					ch6 {
+						module_id = <AOC_MITIGATION_ID>;
+						threshold = <145600>;
+					};
+					ch7 {
+						module_id = <UFS_MITIGATION_ID>;
+						threshold = <546000>;
+					};
+					ch8 {
+						module_id = <GNSS_MITIGATION_ID>;
+						threshold = <2184002>;
+					};
+					ch9 {
+						module_id = <DDR_MITIGATION_ID>;
+						threshold = <409500>;
+					};
+					ch10 {
+						module_id = <MODEM_MITIGATION_ID>;
+						threshold = <107321>;
+					};
+					ch11 {
+						module_id = <WLAN_MITIGATION_ID>;
+						threshold = <107321>;
+					};
+					ch12 {
+						module_id = <CELLULAR_MITIGATION_ID>;
+						threshold = <107321>;
+					};
+				};
+				freq_qos {
+					batoilo {
+						cpucl0 = <1696000>;
+						cpucl1 = <1795000>;
+						cpucl2 = <1999000>;
+						gpu = <723000>;
+						tpu = <845000>;
+					};
+					smpl_warn {
+						cpucl0 = <1696000>;
+						cpucl1 = <2130000>;
+						cpucl2 = <2499000>;
+						gpu = <723000>;
+						tpu = <845000>;
+					};
+				};
+			};
+		};
+	};
+};
+
+/* Thermal Zones */
+&thermal_zones {
+	batoilo2 {
+		zone_name  = "BATOILO2";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation BATOILO2>;
+		trips {
+			batoilo2: batoilo2{
+				temperature = <BO_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+
+	batoilo {
+		zone_name  = "BATOILO";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation BATOILO>;
+		trips {
+			batoilo: batoilo{
+				temperature = <BO_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+
+	vdroop1 {
+		zone_name  = "VDROOP1";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation UVLO1>;
+		trips {
+			vdroop1: vdroop1{
+				temperature = <UVLO1_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+
+	vdroop2 {
+		zone_name  = "VDROOP2";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation UVLO2>;
+		trips {
+			vdroop2: vdroop2{
+				temperature = <UVLO2_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+
+	battery_cycle {
+		zone_name  = "BATTERY_CYCLE";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_battery>;
+
+		/* TODO(b/251537418): fix this trips entry since it's required */
+		trips {
+			fake_trip:dud0 {
+			temperature = <9999>;
+			hysteresis = <100>;
+			type = "passive";
+			};
+		};
+	};
+
+	pmic_120c {
+		zone_name  = "PMIC_120C";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation PMIC_120C>;
+		trips {
+			pmic_120c: pmic-120c {
+				temperature = <PMIC_120C_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+
+	pmic_140c {
+		zone_name  = "PMIC_140C";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation PMIC_140C>;
+		trips {
+			pmic_140c: pmic-140c {
+				temperature = <PMIC_140C_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+
+	pmic_overheat {
+		zone_name  = "PMIC_OVERHEAT";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation PMIC_OVERHEAT>;
+		trips {
+			pmic_overheat: pmic-overheat{
+				temperature = <PMIC_OVERHEAT_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+
+	soc {
+		zone_name  = "BATT_SOC_MOD";
+		polling-delay-passive = <0>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation PMIC_SOC>;
+
+		trips {
+			soc_trip:soc-trip {
+				temperature = <SOC_LIMIT>;
+				hysteresis = <0>;
+				type = "passive";
+			};
+		};
+	};
+
+	smpl_gm {
+		zone_name  = "SMPL_GM";
+		polling-delay-passive = <THERMAL_DELAY_INIT_MS>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation SMPL_WARN>;
+
+		trips {
+			smpl:smpl_0 {
+				temperature = <SMPL_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	ocp_cpu1 {
+		zone_name  = "OCP_CPU1";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation OCP_WARN_CPUCL1>;
+
+		trips {
+			ocp_cpu1:ocp-cpu1 {
+				temperature = <CPU1_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	ocp_cpu2 {
+		zone_name  = "OCP_CPU2";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation OCP_WARN_CPUCL2>;
+
+		trips {
+			ocp_cpu2:ocp-cpu2 {
+				temperature = <12000>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	soft_ocp_cpu1 {
+		zone_name  = "SOFT_OCP_CPU1";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation SOFT_OCP_WARN_CPUCL1>;
+
+		trips {
+			soft_ocp_cpu1:soft-ocp-cpu1 {
+				temperature = <CPU1_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	soft_ocp_cpu2 {
+		zone_name  = "SOFT_OCP_CPU2";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation SOFT_OCP_WARN_CPUCL2>;
+
+		trips {
+			soft_ocp_cpu2:soft-ocp-cpu2 {
+				temperature = <CPU2_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	ocp_tpu {
+		zone_name  = "OCP_TPU";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation OCP_WARN_TPU>;
+
+		trips {
+			ocp_tpu:ocp-tpu{
+				temperature = <TPU_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	soft_ocp_tpu {
+		zone_name  = "SOFT_OCP_TPU";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation SOFT_OCP_WARN_TPU>;
+
+		trips {
+			soft_ocp_tpu:soft-ocp-tpu {
+				temperature = <TPU_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	ocp_gpu {
+		zone_name  = "OCP_GPU";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation OCP_WARN_GPU>;
+
+		trips {
+			ocp_gpu:ocp-gpu{
+				temperature = <GPU_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+	soft_ocp_gpu {
+		zone_name  = "SOFT_OCP_GPU";
+		polling-delay-passive = <100>;
+		polling-delay = <0>;
+		thermal-sensors = <&google_mitigation SOFT_OCP_WARN_GPU>;
+
+		trips {
+			soft_ocp_gpu:soft-ocp-gpu {
+				temperature = <GPU_UPPER_LIMIT>;
+				hysteresis = <THERMAL_HYST_LEVEL>;
+				type = "passive";
+			};
+		};
+	};
+};
