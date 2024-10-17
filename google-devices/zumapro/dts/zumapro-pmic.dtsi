@@ -1,0 +1,266 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * zuma pmic device tree source
+ *
+ * Copyright 2023 Google LLC.
+ *
+ */
+
+#include "google-dts-zuma/zuma-pmic.dtsi"
+
+&m_buck2_reg {
+	schematic-name = "S2M_VDD_CPUCL1";
+	subsys-name = "CPU(MID)";
+};
+
+&m_buck3_reg {
+	schematic-name = "S3M_VDD_CPUCL2";
+	subsys-name = "CPU(BIG)";
+};
+
+&m_buck9_reg {
+	schematic-name = "S9M_VDD_CPUCL1_M";
+	subsys-name = "CPU(MID)";
+};
+
+&m_ldo4_reg {
+	schematic-name = "L4M_TS_AVDD";
+	subsys-name = "TS";
+};
+
+&m_ldo5_reg {
+	schematic-name = "L5M_AON";
+	subsys-name = "LDO";
+};
+
+&m_ldo7_reg {
+	schematic-name = "L7M_SPARE";
+	subsys-name = "Spare";
+};
+
+&m_ldo8_reg {
+	schematic-name = "L8M_USB";
+	subsys-name = "USB";
+};
+
+&m_ldo9_reg {
+	schematic-name = "L9M_USB";
+	subsys-name = "USB";
+};
+
+&m_ldo11_reg {
+	schematic-name = "L11M_VDD_CPUCL2_HS_M";
+	subsys-name = "CPU(BIG)";
+};
+
+&m_ldo12_reg {
+	schematic-name = "L12M_VDD_CPUCL0_M";
+	subsys-name = "CPU(LITTLE)";
+	regulator-always-on;
+	regulator-initial-mode = <SEC_OPMODE_SUSPEND>;
+};
+
+&m_ldo15_reg {
+	schematic-name = "L15M_SPARE";
+	subsys-name = "Spare";
+};
+
+&m_ldo17_reg {
+	schematic-name = "L17M_VDD_CPUCL2_HD_M";
+	subsys-name = "CPU(BIG)";
+};
+
+&m_ldo19_reg {
+	schematic-name = "L19M_EUSB2";
+	subsys-name = "USB";
+};
+
+&m_ldo22_reg {
+	schematic-name = "L22M_SPARE";
+	subsys-name = "Spare";
+};
+
+&m_ldo23_reg {
+	schematic-name = "L23M_SPARE";
+	subsys-name = "Spare";
+};
+
+&m_ldo24_reg {
+	schematic-name = "L24M_SPARE";
+	subsys-name = "Spare";
+};
+
+&m_ldo25_reg {
+	schematic-name = "L25M_TSP_DVDD";
+	subsys-name = "TS";
+};
+
+&m_ext4_rail {
+	schematic-name = "VSYS_PWR_DISPLAY";
+	shunt-res-uohms = <5000>;
+};
+
+&m_ext5_rail {
+	schematic-name = "VSYS_PWR_CAMERA";
+	shunt-res-uohms = <5000>;
+	subsys-name = "Camera";
+};
+
+// Reselect rail from L15M_SPARE to S9M_VDD_CPUCL0_M on ch9
+&ch9 {
+	rail-name = "BUCK9M";
+};
+
+// Reselect rail from S9M_VDD_CPUCL0_M to VSYS_PWR_CAMERA
+&ch10 {
+	rail-name = "VSEN_C1";
+};
+
+&s_buck11_reg {
+	schematic-name = "S11S_VDD_INT_M";
+	subsys-name = "INT";
+};
+
+&s_ldo4_reg {
+	schematic-name = "L4S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo6_reg {
+	schematic-name = "L6S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo7_reg {
+	schematic-name = "L7S_SENSORS";
+	subsys-name = "Sensors";
+};
+
+&s_ldo8_reg {
+	schematic-name = "L8S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo12_reg {
+	schematic-name = "L12S_CAMIO";
+	subsys-name = "Camera";
+};
+
+// MMC card is unused
+&s_ldo13_reg {
+	schematic-name = "L13S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo14_reg {
+	schematic-name = "L14S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo15_reg {
+	schematic-name = "L15S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo16_reg {
+	schematic-name = "L16S_UWB";
+	subsys-name = "UWB";
+};
+
+&s_ldo17_reg {
+	schematic-name = "L17S_UWB";
+	subsys-name = "UWB";
+};
+
+&s_ldo18_reg {
+	schematic-name = "L18S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo20_reg {
+	schematic-name = "L20S_DMIC2";
+	subsys-name = "DMIC";
+};
+
+&s_ldo22_reg {
+	schematic-name = "L22S_UDFPS";
+	subsys-name = "UDFPS";
+};
+
+&s_ldo23_reg {
+	schematic-name = "L23S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo25_reg {
+	schematic-name = "L25S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo26_reg {
+	schematic-name = "L26S_LDAF";
+	subsys-name = "Camera";
+};
+
+&s_ldo27_reg {
+	schematic-name = "L27S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo28_reg {
+	schematic-name = "L28S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ldo29_reg {
+	schematic-name = "L29S_SPARE";
+	subsys-name = "Spare";
+};
+
+&s_ext4_rail {
+	schematic-name = "VSYS_PWR_MODEM";
+	shunt-res-uohms = <5000>;
+	subsys-name = "MODEM";
+};
+
+&s_ext5_rail {
+	schematic-name = "VSYS_PWR_WLAN_BT";
+	shunt-res-uohms = <10000>;
+	subsys-name = "WLAN-BT";
+};
+
+&s_ext6_rail {
+	shunt-res-uohms = <10000>;
+};
+
+// Reselect rail from L29S_SPARE to L21S_VDD2L_MEM on ch21
+&ch21 {
+	rail-name = "LDO21S";
+};
+
+// Request from b/331556280 and b/342976647
+&ch17 {
+	rail-name = "LDO22S";
+};
+
+&ch20 {
+	rail-name = "BUCK3S";
+};
+
+&s2mpg14mfd {
+	init_time,year = <123>;
+	init_time,wday = <0>;
+
+	/* PCTRLSEL(VGPIO) 1~11 (CONTROL_SEL#) */
+	sel_vgpio = <0xC3 0x1D 0xE3 0x0C 0x63 0xD6
+		0xE1 0x47 0x4D 0x96 0x09>;
+
+        b2_soft_ocp_warn_en = <OCP_WARN_DISABLE>;
+        b3_soft_ocp_warn_en = <OCP_WARN_DISABLE>;
+        b7_soft_ocp_warn_en = <OCP_WARN_DISABLE>;
+};
+
+&s2mpg15mfd {
+	b2_soft_ocp_warn_lvl = <OCP_WARN_LVL_2PH_5_012_A>;
+        b2_soft_ocp_warn_en = <OCP_WARN_DISABLE>;
+};
