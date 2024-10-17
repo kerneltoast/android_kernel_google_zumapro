@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Caiman board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#define ZUMA_BMS_ENABLE_CHG_PROFILE_SWITCH
+#include "zumapro-caimito-common.dtsi"
+#include "google-dts-zumapro/zumapro-board-cp-s5400-sit-pre-dvt.dtsi"
+#include "zumapro-caiman-common.dtsi"
+#include "google-dts-zuma/zuma-cp-s5400-phone-gnss.dtsi"
+#include "zuma-caimito-gnss-samsung.dtsi"
+#include "google-dts-zuma/max777xx-fwupdate.dtsi"
+#include "zumapro-wingboard-charging.dtsi"
+#include "zumapro-wingboard-battery.dtsi"
+
+/ {
+	board_id = <0x60903>;
+	board_rev = <0x010102>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA PRO CAIMAN EVT 1.1 Wingboard based on ZUMA PRO";
+			compatible = "google,ZUMA PRO CAIMAN", "google,ZUMA PRO";
+		};
+	};
+};

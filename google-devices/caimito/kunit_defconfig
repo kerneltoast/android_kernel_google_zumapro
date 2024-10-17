@@ -1,0 +1,6 @@
+# Defconfig fragment for Android KUnit targets
+
+# Put test module configs here.
+
+# TODO(b/323263169) Enable this.
+# CONFIG_GSA_CORE_KUNIT_TEST=m

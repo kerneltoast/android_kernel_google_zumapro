@@ -1,0 +1,93 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Display connector nodes for tokay-related boards.
+ *
+ * Copyright 2024 Google LLC
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	fragment@display {
+		target-path = "/";
+		__overlay__ {
+			gs_connector: gs-drm-connector {
+				compatible = "google,drm_connector";
+				label = "gs-drm-connector";
+
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port {
+					/* input */
+					dsim0_connector_in: endpoint {
+						remote-endpoint = <&dsim0_connector_out>;
+					};
+				};
+
+				/* panels will go here */
+				google_gs_tk4a: panel@0 {
+					compatible = "google,gs-tk4a";
+					label = "google-tk4a";
+					channel = <0>;
+					touch = <&spitouch>;
+					vddd-normal-microvolt = <1150000>;
+					vddd-lp-microvolt     = <1062500>;
+					post-vddd-lp;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+					vci-supply = <&m_ldo14_reg>;
+					vddi-supply = <&s_bucka_reg>;
+					vddd-supply = <&disp_vddd>;
+					vddd-gpios = <&gpp21 5 GPIO_ACTIVE_HIGH>;
+				};
+
+				google_gs_tk4c: panel@1 {
+					compatible = "google,gs-tk4c";
+					label = "google-tk4c";
+					channel = <0>;
+					touch = <&spitouch>;
+					vddd-normal-microvolt = <1150000>;
+					vddd-lp-microvolt     = <1062500>;
+					post-vddd-lp;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+					vci-supply = <&m_ldo14_reg>;
+					vddi-supply = <&s_bucka_reg>;
+					vddd-supply = <&disp_vddd>;
+					vddd-gpios = <&gpp21 5 GPIO_ACTIVE_HIGH>;
+					vddd_gpio_fixed_level = <0>;
+				};
+
+				google_gs_tk4b: panel@2 {
+					compatible = "google,gs-tk4b";
+					label = "google-tk4b";
+					channel = <0>;
+					touch = <&spitouch>;
+					vddd-normal-microvolt = <1150000>;
+					vddd-lp-microvolt     = <1062500>;
+					post-vddd-lp;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+					vci-supply = <&m_ldo14_reg>;
+					vddi-supply = <&s_bucka_reg>;
+					vddd-supply = <&disp_vddd>;
+					vddd-gpios = <&gpp21 5 GPIO_ACTIVE_HIGH>;
+				};
+
+				panel@3 {
+					compatible = "google,panel-gs-simple";
+					label = "samsung-emul";
+					channel = <0>;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+				};
+			};
+		};
+	};
+};

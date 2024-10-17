@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load("//build/kernel/kleaf:kernel.bzl", "kernel_dtstree")
+
+kernel_dtstree(
+    name = "caimito.dt",
+    srcs = glob([
+        "google/*.dtsi",
+        "google/*.dts",
+        "google/google-dts-zuma/*.dts",
+        "google/google-dts-zuma/*.dtsi",
+        "google/google-dts-zumapro/*.dts",
+        "google/google-dts-zumapro/*.dtsi",
+        "google/google-dts-ripcurrent/*.dts",
+        "google/google-dts-ripcurrent/*.dtsi",
+        "google/google-dts-zuma/google-dts-ripcurrent/*.dts",
+        "google/google-dts-zuma/google-dts-ripcurrent/*.dtsi",
+        "google/google-dts-zumapro/google-dts-zuma/*.dts",
+        "google/google-dts-zumapro/google-dts-zuma/*.dtsi",
+        "google/google-dts-ripcurrent/google-dts-zuma/*.dts",
+        "google/google-dts-ripcurrent/google-dts-zuma/*.dtsi",
+    ]) + [
+        "Makefile",
+        "google/Makefile",
+        "google/google-dts-ripcurrent/Makefile",
+        "google/google-dts-ripcurrent/google-dts-zuma/google-dts-ripcurrent/zuma-ripcurrent-battery-data.dtsi",
+        "google/google-dts-zuma/Makefile",
+        "google/google-dts-zumapro/Makefile",
+        "//private/google-modules/soc/gs:gs.dt-bindings",
+    ],
+    visibility = [
+        "//private/devices/google/caimito:__pkg__",
+        "//private/google-modules/soc/gs:__pkg__",
+    ],
+)

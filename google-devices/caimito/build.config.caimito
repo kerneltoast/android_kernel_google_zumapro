@@ -1,0 +1,20 @@
+# KERNEL_DIR is set by the environment to the directory where the BUILD_CONFIG
+# file is located.
+DEVICE_DIR=${KERNEL_DIR}
+SOC_DIR=private/google-modules/soc/gs
+# Compile these modules with the GKI kernel
+KERNEL_DIR=${GKI_KERNEL_DIR:-"aosp-staging"}
+
+# These just need to be relative to the ROOT_DIR
+FRAGMENT_CONFIG=${DEVICE_DIR}/caimito_gki.fragment
+. ${ROOT_DIR}/private/devices/google/zumapro/build.config.zumapro
+
+MAKE_GOALS="$MAKE_GOALS
+modules
+dtbs
+"
+
+DTC_INCLUDE=${ROOT_DIR}/${SOC_DIR}/include/dtc
+MKDTIMG_FLAGS="--page_size=4096 --id=/:board_id --rev=/:board_rev"
+
+BCMDHD=4390

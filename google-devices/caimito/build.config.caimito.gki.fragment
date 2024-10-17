@@ -1,0 +1,13 @@
+TRIM_NONLISTED_KMI=0
+KMI_SYMBOL_LIST_STRICT_MODE=0
+
+# replace check_defconfig with a no-op
+POST_DEFCONFIG_CMDS="${POST_DEFCONFIG_CMDS//check_defconfig/true}"
+append_cmd POST_DEFCONFIG_CMDS update_caimito_gki_config
+
+function update_caimito_gki_config() {
+  ${KERNEL_DIR}/scripts/config --file ${OUT_DIR}/.config \
+    -d ARM64_SVE
+  (cd ${OUT_DIR} && \
+   make O=${OUT_DIR} "${TOOL_ARGS[@]}" ${MAKE_ARGS} olddefconfig)
+}

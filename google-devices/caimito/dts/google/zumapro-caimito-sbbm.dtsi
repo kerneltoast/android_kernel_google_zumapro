@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * SideBand Bit Multiplexer device tree source
+ *
+ * Copyright 2024 Google LLC
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include <arm64/exynos/exynos-pinctrl.h>
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	fragment@sbbmux {
+		target-path = "/";
+		__overlay__ {
+			sbb_mux: sbb-mux {
+				compatible = "google,sbb-mux";
+				gpios = <&gpp4 3 0>, <&gpp19 6 0>, <&gpp19 7 0>;
+				gpio_names = "C1_T0__XAPC_USI2_CTSn_CSn",
+						"C1_T1__XAPC_USI9_RTSn_DI",
+						"C1_T2__XAPC_USI9_CTSn_CSn";
+				default_signals = "gp_region_0", "gp_region_1", "gp_region_2";
+			};
+		};
+	};
+};

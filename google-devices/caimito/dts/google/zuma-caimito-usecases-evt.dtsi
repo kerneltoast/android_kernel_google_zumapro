@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Usecases specific to Caimito Evt platforms
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+/* system use cases */
+&max77779_chg {
+	max77779,extbst-ctl = <&max77759_tcpc_gpio 0 GPIO_ACTIVE_HIGH>;
+
+	/* for OTG related usecase*/
+	max77779,rx-to-rx-otg-en; /* support RX -> RX+OTG */
+	max77779,ext-otg-only; /* use external OTG only */
+};

@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Tokay board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#define ESIM_NO_CHIP_ENABLE_PIN
+#include "zuma-caimito-common.dtsi"
+#include "zuma-tokay-common.dtsi"
+#include "google-dts-zumapro/zumapro-phone-gps.dtsi"
+#include "zuma-tokay-wifi-4390a0.dtsi"
+
+/ {
+	board_id = <0x40a02>;
+	board_rev = <0x010001>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA TOKAY Proto 1.0 Broadcom GNSS board based on ZUMA";
+			compatible = "google,ZUMA TOKAY", "google,ZUMA";
+		};
+	};
+};

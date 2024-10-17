@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Tokay board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+#include "zuma-tokay-battery.dtsi"
+#include "zuma-tokay-charging.dtsi"
+#include "zuma-tokay-wcharger.dtsi"
+#include "zuma-tokay-usecases.dtsi"
+#include "zuma-tokay-audio.dtsi"
+#ifdef ZUMA_TOKAY_WINGBOARD_CAMERA
+#include "zuma-komodo-camera.dtsi"
+#include "zuma-tokay-wingboard-camera.dtsi"
+#else
+#include "zuma-tokay-camera.dtsi"
+#include "zuma-tokay-ldaf.dtsi"
+#endif
+#include "zuma-tokay-display.dtsi"
+#include "zuma-tokay-pmic.dtsi"
+#include "zuma-tokay-touch.dtsi"
+#include "zumapro-tokay-bcl.dtsi"

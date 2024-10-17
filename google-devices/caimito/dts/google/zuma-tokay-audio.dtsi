@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * tokay audio device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+&aoc {
+	aoc-board-cfg = "TK4";
+	aoc-board-id = <0x40a02>;
+	aoc-board-rev = <0x10000>;
+	prevent-fw-load = <0x0>;
+};
+
