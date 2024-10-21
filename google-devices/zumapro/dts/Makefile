@@ -4,7 +4,8 @@ zumapro_overlays := \
 	zumapro-emulator.dtbo \
 	zumapro-hybrid.dtbo
 
-zumapro_dtbs := \
+DTC_FLAGS := -@
+dtb-$(CONFIG_SOC_ZUMA) := \
 	zumapro-a0-foplp.dtb \
 	zumapro-a0-ipop.dtb \
 	zumapro-a1-foplp.dtb \
