@@ -122,6 +122,9 @@ EXTRA_SYMBOLS += $(GMODULE_PATH)/iif/Module.symvers
 endif
 endif # OUT_DIR
 
+%/gcip.o: FORCE
+	$(Q)$(MAKE) $(build)=$(@D) $@
+
 modules modules_install:
 	$(MAKE) -C $(KERNEL_SRC) M=$(M)/$(GCIP_DIR) gcip.o
 	$(MAKE) -C $(KERNEL_SRC) M=$(M) W=1 $(KBUILD_OPTIONS) \

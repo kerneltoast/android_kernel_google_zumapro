@@ -56,6 +56,9 @@ rio-objs	:= rio-core.o \
 		   rio-wakelock.o \
 		   $(edgetpu-objs)
 
+%/gcip.o: FORCE
+	$(Q)$(MAKE) $(build)=$(@D) $@
+
 CFLAGS_rio-fs.o := -DCONFIG_RIO=1
 CFLAGS_rio-core.o := -DCONFIG_RIO=1
 CFLAGS_rio-device.o := -DCONFIG_RIO=1

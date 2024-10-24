@@ -7,7 +7,6 @@ KERNEL_SRC ?= /lib/modules/$(shell uname -r)/build
 M ?= $(shell pwd)
 
 KBUILD_OPTIONS	+= CONFIG_RIO=m
-KBUILD_OPTIONS	+= CONFIG_GCIP=y
 
 -include $(KERNEL_SRC)/../private/google-modules/soc/gs/Makefile.include
 
