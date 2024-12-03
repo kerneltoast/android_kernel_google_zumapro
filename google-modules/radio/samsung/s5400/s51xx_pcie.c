@@ -337,7 +337,7 @@ static void s51xx_pcie_event_cb(pcie_notify_t *noti)
 
 		if (mc->pcie_linkdown_retry_cnt++ < 10) {
 			mif_err("[%d] retry pcie poweron !!!\n", mc->pcie_linkdown_retry_cnt);
-			queue_work_on(2, mc->wakeup_wq, &mc->wakeup_work);
+			queue_work(mc->wakeup_wq, &mc->wakeup_work);
 		} else {
 			mif_err("[%d] force crash !!!\n", mc->pcie_linkdown_retry_cnt);
 			pcie_dump_all_status(mc->pcie_ch_num);
@@ -349,7 +349,7 @@ static void s51xx_pcie_event_cb(pcie_notify_t *noti)
 
 		if (mc->pcie_cto_retry_cnt++ < 10) {
 			mif_err("[%d] retry pcie poweron !!!\n", mc->pcie_cto_retry_cnt);
-			queue_work_on(2, mc->wakeup_wq, &mc->wakeup_work);
+			queue_work(mc->wakeup_wq, &mc->wakeup_work);
 		} else {
 			mif_err("[%d] force crash !!!\n", mc->pcie_cto_retry_cnt);
 			pcie_dump_all_status(mc->pcie_ch_num);
