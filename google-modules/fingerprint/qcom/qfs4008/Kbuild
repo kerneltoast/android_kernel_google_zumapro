@@ -18,6 +18,6 @@ no-export-headers += linux/kvm_para.h
 endif
 endif
 
-ccflags-y += -I$(srctree)/../private/google-modules/fingerprint/qcom/qfs4008
+ccflags-y += -I$(srctree)/google-modules/fingerprint/qcom/qfs4008
 
 obj-$(CONFIG_QCOM_QBT_HANDLER) = qbt_handler.o
