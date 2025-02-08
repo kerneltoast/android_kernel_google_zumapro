@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * ZumaPro SoC reserved memory adjustments
+ * for some proto devices.
+ * Copyright 2024 Google LLC
+ */
+&tpu_fw_reserved {
+	status = "disabled";
+};
+
+&reserved_memory {
+	tpu_fw_reserved_zumapro: tpu_fw@92e00000 {
+		reg = <0x0 0x92e00000 0x01200000>;
+		no-map;
+	};
+};
+
+&edgetpu {
+	memory-regions = <&tpu_fw_reserved_zumapro>;
+};
