@@ -1,0 +1,137 @@
+
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Display connector nodes for comet-related boards.
+ *
+ * Copyright 2024 Google LLC
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	fragment@display {
+		target-path = "/";
+		__overlay__ {
+			gs_connector1: gs-drm-connector1 {
+				compatible = "google,drm_connector";
+				label = "gs-drm-connector";
+
+				/* 0: primary, 1: secondary */
+				google,device-index = <0>;
+
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port {
+					/* input */
+					dsim1_connector_in: endpoint {
+						remote-endpoint = <&dsim1_connector_out>;
+					};
+				};
+
+				/* panels will go here */
+				google_gs_ct3b: panel@0 {
+					compatible = "google,gs-ct3b";
+					label = "google-ct3b";
+					channel = <0>;
+					/* 0: normal, 1: bottom up, 2: left up, 3: right up */
+					orientation = <2>;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+					vddi-supply = <&m_ldo24_reg>;
+					vddr-supply = <&disp_vddr_0>;
+					vci-supply = <&m_ldo14_reg>;
+				};
+
+				google_gs_ct3a: panel@1 {
+					compatible = "google,gs-ct3a";
+					label = "google-ct3a";
+					channel = <0>;
+					/* 0: normal, 1: bottom up, 2: left up, 3: right up */
+					orientation = <2>;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+					vddi-supply = <&m_ldo24_reg>;
+					vddr-supply = <&disp_vddr_0>;
+					vci-supply = <&m_ldo14_reg>;
+				};
+
+				panel@2 {
+					compatible = "google,panel-gs-simple";
+					label = "samsung-emul";
+					channel = <0>;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+				};
+			};
+
+			gs_connector0: gs-drm-connector0 {
+				compatible = "google,drm_connector";
+				label = "gs-drm-connector";
+
+				/* 0: primary, 1: secondary */
+				google,device-index = <1>;
+
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port {
+					/* input */
+					dsim0_connector_in: endpoint {
+						remote-endpoint = <&dsim0_connector_out>;
+					};
+				};
+
+				/* panels will go here */
+				google_gs_ct3d: panel@0 {
+					compatible = "google,gs-ct3d";
+					label = "google-ct3d";
+					channel = <0>;
+
+					/* reset, power */
+					reset-gpios = <&gpp20 2 GPIO_ACTIVE_HIGH>;
+					vddi-supply = <&s_ldo29_reg>;
+					vddd-supply = <&disp_vddd>;
+					vci-supply = <&s_ldo8_reg>;
+				};
+
+				google_gs_ct3e: panel@1 {
+					compatible = "google,gs-ct3e";
+					label = "google-ct3e";
+					channel = <0>;
+
+					/* reset, power */
+					reset-gpios = <&gpp20 2 GPIO_ACTIVE_HIGH>;
+					vddi-supply = <&s_ldo29_reg>;
+					vddd-supply = <&disp_vddd>;
+					vci-supply = <&s_ldo8_reg>;
+				};
+
+				google_gs_ct3c: panel@2 {
+					compatible = "google,gs-ct3c";
+					label = "google-ct3c";
+					channel = <0>;
+
+					/* reset, power */
+					reset-gpios = <&gpp20 2 GPIO_ACTIVE_HIGH>;
+					vddi-supply = <&s_ldo29_reg>;
+					vddd-supply = <&disp_vddd>;
+					vci-supply = <&s_ldo8_reg>;
+				};
+
+				panel@3 {
+					compatible = "google,panel-gs-simple";
+					label = "samsung-emul";
+					channel = <0>;
+
+					/* reset, power */
+					reset-gpios = <&gpp20 2 GPIO_ACTIVE_HIGH>;
+				};
+			};
+		};
+	};
+};

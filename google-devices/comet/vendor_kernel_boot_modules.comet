@@ -1,0 +1,10 @@
+#
+# comet specific modules loaded during first stage init from vendor_kernel_boot
+# (platform common modules are from vendor_kernel_boot_modules.zuma)
+#
+panel-gs-ct3a.ko
+panel-gs-ct3b.ko
+panel-gs-ct3c.ko
+panel-gs-ct3d.ko
+panel-gs-ct3e.ko
+hall_sensor.ko

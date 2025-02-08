@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Google fingerprint device tree source
+ *
+ * Copyright 2023 Google, LLC.
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <arm64/exynos/exynos-pinctrl.h>
+
+&pinctrl_11 {
+		fps_rst_power_down: fps_rst_power_down {
+				samsung,pins ="gpp1-0";
+				samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+				samsung,pin-con-pdn = <1>;
+				samsung,pin-pud-pdn = <3>;
+		};
+};
+
+&odm {
+		fpc:fp_fpc1020 {
+				staus = "ok";
+				compatible = "fpc,fpc1020";
+				interrupt-parent = <&gpa7>;
+				interrupts = <6 0>;
+				pinctrl-names = "rst,power_down";
+				pinctrl-0 = <&fps_rst_power_down>;
+				fpc,gpio_rst = <&gpp1 0 GPIO_ACTIVE_LOW>;
+				fpc,gpio_irq = <&gpa7 6 GPIO_ACTIVE_HIGH>;
+		};
+};
+
+&s_ldo15_reg {
+    regulator-always-on;
+    regulator-min-microvolt = <3300000>;
+    regulator-max-microvolt = <3300000>;
+};
