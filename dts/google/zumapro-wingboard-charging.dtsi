@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Wingboard overlay for charging. Disable PPS, WLC
+ * Use Komodo battery
+ *
+ * Copyright 2023 Google LLC
+ */
+
+&google_charger {
+	google,chg-power-supply = "main-charger";
+};
+
+&ra9530 {
+	status = "disabled";
+};
+
+&google_cpm {
+    status = "disabled";
+};
+
+&max77759tcpc {
+    chg-psy-name = "main-charger";
+};

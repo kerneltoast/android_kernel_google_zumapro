@@ -1,0 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-only
+
+/* Overwrite wifi chip to 1 for devices using 4390a0 */
+&aoc {
+	wifi-chip = <1>;
+};

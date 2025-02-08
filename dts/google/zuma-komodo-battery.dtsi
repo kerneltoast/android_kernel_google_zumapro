@@ -1,0 +1,49 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries specific to panther
+ *
+ * Copyright 2023 Google,LLC
+ *
+ */
+
+&google_battery {
+	google,chg-battery-capacity = <4942>;
+
+	google,chg-cv-limits = <4200000 4250000 4300000 4350000 4480000>;
+	google,chg-temp-limits = <0 100 200 420 460 480 550>;
+	google,chg-cc-limits = <
+		 50   30   30    0   0
+		100  100  100   50  50
+		150  150  150  150  50
+		150  150   50   50  50
+		 50   50   50    0   0
+		 30    0    0    0   0
+	>;
+
+	google,chg-topoff-limits = <250 250 250 500 500 500>;
+
+	google,pullback-current;
+
+	google,ttf-temp-idx= <2>;
+	google,ttf-adapter = <4500>;
+	google,ttf-soc-table =  <52 72 85 89 93  95  97  100>;
+	google,ttf-elap-table = <24 47 65 82 121 170 222 116>;
+	google,ttf-tier-table = <0 51 76>;
+	google,ttf-report-max-ratio = <0>;
+
+	google,batt-id-1-atl {
+		google,batt-id = <1>;
+		google,aacr-ref-cycles = <100 200 300 400 500 600 700 800 900 1000>;
+		google,aacr-ref-fade10 = <  1   8  15  22  27  38  45  53  62   69>;
+	};
+};
+
+&max77779_fg {
+	maxim,fg-data {
+#ifdef ZUMA_BMS_PROTO_EVT10_MODEL
+		#include "zuma-komodo-proto-evt10-battery-data.dtsi"
+#else
+		#include "zuma-komodo-battery-data.dtsi"
+#endif
+	};
+};

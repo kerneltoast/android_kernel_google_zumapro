@@ -1,0 +1,47 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Samsung CP interface device tree source
+ *
+ * Copyright (c) 2023 Samsung Electronics Co., Ltd.
+ *             http://www.samsung.com
+ */
+
+#include "google-dts-zuma/zuma-board-cp-s5300-sit.dtsi"
+
+/ {
+	fragment@modemif {
+		target-path = "/";
+		__overlay__ {
+			cpif {
+				mif,name = "s5400";
+				pci_db_addr = <0x0>;
+				pinctrl-0 = <&s5100_ap2cp_cp_pwr_on>,
+					<&s5100_ap2cp_cp_nreset_n>,
+					<&s5100_cp2ap_cp_ps_hold>,
+					<&s5100_ap2cp_wakeup>,
+					<&s5100_cp2ap_wakeup>,
+					<&s5100_ap2cp_dump_noti>,
+					<&s5100_ap2cp_pda_active>,
+					<&s5100_cp2ap_phone_active>,
+					<&s5100_ap2cp_cp_wrst_n>,
+					<&s5100_cp2ap_cp_wrst_n>,
+					<&s5100_ap2cp_pm_wrst_n>,
+					<&s5100_ap2cp_partial_rst_n>;
+
+				/* Definition of GPIOs */
+				gpio_ap2cp_partial_rst_n = <&gpp21 6 0x1>;
+
+			};
+		};
+	};
+};
+
+&pinctrl_12 {
+	s5100_ap2cp_partial_rst_n: s5100_ap2cp_partial_rst_n {
+		samsung,pins = "gpp21-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+};

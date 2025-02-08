@@ -1,0 +1,54 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Display connector nodes for komodo-related boards.
+ *
+ * Copyright 2024 Google LLC
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	fragment@display {
+		target-path = "/";
+		__overlay__ {
+			gs_connector: gs-drm-connector {
+				compatible = "google,drm_connector";
+				label = "gs-drm-connector";
+
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port {
+					/* input */
+					dsim0_connector_in: endpoint {
+						remote-endpoint = <&dsim0_connector_out>;
+					};
+				};
+
+				/* panels will go here */
+				google_gs_km4: panel@0 {
+					compatible = "google,gs-km4";
+					label = "google-km4";
+					channel = <0>;
+					touch = <&spitouch>;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+					vci-supply = <&m_ldo14_reg>;
+					vddi-supply = <&s_bucka_reg>;
+					vddd-supply = <&disp_vddd>;
+					vddd-gpios = <&gpp21 5 GPIO_ACTIVE_HIGH>;
+				};
+				panel@1 {
+					compatible = "google,panel-gs-simple";
+					label = "samsung-emul";
+					channel = <0>;
+
+					/* reset, power */
+					reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+				};
+			};
+		};
+	};
+};

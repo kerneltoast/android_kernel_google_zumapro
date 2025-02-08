@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries specific to caiman-tokay
+ *
+ * Copyright 2024 Google,LLC
+ *
+ */
+
+/* for caiman/tokay DVT+ */
+&google_battery {
+	google,chg-battery-capacity = <4558>;
+	google,chg-cv-limits = <4200000 4300000 4350000 4500000>;
+
+	google_debug_chg_profile {
+		google,chg-battery-capacity = <4458>;
+		google,chg-cv-limits = <4200000 4300000 4350000 4480000>;
+	};
+};

@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Ripcurrent24 with Sapwood Type-c device tree
+ *
+ * Copyright (c) 2022 Google, LLC
+ *
+*/
+&max77759tcpc {
+	connector {
+		sink-pdos = <PDO_FIXED(5000, 3000,
+				       PDO_FIXED_DATA_SWAP |
+				       PDO_FIXED_USB_COMM |
+				       PDO_FIXED_HIGHER_CAP |
+				       PDO_FIXED_DUAL_ROLE)
+			     PDO_FIXED(9000, 2200, 0)
+			     PDO_PPS_APDO(5000, 21000, 3000)>;
+	};
+};

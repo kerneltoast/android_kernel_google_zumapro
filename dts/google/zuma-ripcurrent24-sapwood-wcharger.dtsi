@@ -1,0 +1,60 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Wireless Charger device tree entries.
+ *
+ * Copyright 2022 Google LLC
+ */
+
+#include <arm64/exynos/exynos-pinctrl.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	fragment@wlc {
+		target-path = "/";
+		__overlay__ {
+			google,charger {
+				google,wlc-power-supply = "wireless";
+			};
+		};
+	};
+};
+
+&pinctrl_0 {
+	/* XIENT_23 P9412 Wireless Charger Interrupt */
+	wc_irq: wc_irq {
+		samsung,pins = "gpa8-1"; /* QI_INT_R */
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <ZUMA_PIN_DRV_X1>;
+	};
+};
+
+&pinctrl_8 {
+	/* XHSI1_GPIO6 P9412 Wireless Charger Enable */
+	wc_en: wc_en {
+		samsung,pins = "gph1-4"; /* QI_EN_L */
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_OUT0>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+};
+
+&hsi2c_9 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	#include "google-dts-zuma/zuma-wcharger-ra9530.dtsi"
+};
+
+&ra9530 {
+	status = "okay";
+	pinctrl-0 = <&wc_irq &wc_en>;
+
+	idt,gpio_wlc_en = <&gph1 4 GPIO_ACTIVE_LOW>;
+	idt,gpio_qien = <&gph1 4 GPIO_ACTIVE_LOW>;
+	idt,irq_gpio = <&gpa8 1 GPIO_ACTIVE_LOW>;
+
+	idt,ramp-disable;
+};
+

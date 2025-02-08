@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * ZumaPro with Sapwood board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+#include "zumapro-board-common.dtsi"
+#include "zumapro-ripcurrentpro-bcl-sapwood.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-camera-pmic.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-camera.dtsi"
+#include "zumapro-ripcurrentpro-usb.dtsi"
+/*
+#include "zuma-24-common.dtsi"
+#include "google-dts-zumapro/zumapro-board-gps.dtsi"
+#include "zuma-ripcurrent24-ultrasonic-udfps.dtsi"
+*/
+
+#include "google-dts-ripcurrent/zuma-ripcurrent-battery.dtsi"
+#include "google-dts-zuma/zuma-typec.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-gsa-gsc.dtsi"
+
+/* Sapwood Config */
+#include "zuma-ripcurrent24-sapwood-caimito-battery.dtsi"
+#include "zuma-ripcurrent24-sapwood-caimito-charging.dtsi"
+#include "zuma-ripcurrent24-sapwood-caimito-typec.dtsi"
+#include "zuma-ripcurrent24-sapwood-wcharger.dtsi"
+#include "zuma-caimito-usecases-evt.dtsi"

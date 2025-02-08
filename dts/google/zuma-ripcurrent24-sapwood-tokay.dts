@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Komodo Sapwood board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include "zuma-ripcurrent24-sapwood-caimito-common.dtsi"
+#include "zuma-ripcurrent24-sapwood-tokay-charging.dtsi"
+#include "google-dts-zumapro/zumapro-board-gps.dtsi"
+#include "zuma-ripcurrent24-ultrasonic-udfps.dtsi"
+#include "zuma-tokay-wcharger.dtsi"
+#include "zuma-tokay-usecases.dtsi"
+
+/ {
+	board_id = <0x40701>;
+	board_rev = <0x010002>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA Ripcurrent24 Sapwood TOKAY configuration board based on ZUMA";
+			compatible = "google,ZUMA Ripcurrent24 Sapwood TOKAY", "google,ZUMA";
+		};
+	};
+};
