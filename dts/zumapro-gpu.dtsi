@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Copyright 2024 Google LLC
+ *
+ */
+
+#include "google-dts-zuma/zuma-gpu.dtsi"
+
+&mali {
+	gpu_dvfs_max_freq = <940000>;
+};
