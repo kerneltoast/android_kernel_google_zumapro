@@ -1,0 +1,8 @@
+#
+# Hall Sensor Driver Support
+#
+
+config SENSORS_HALL
+	tristate "hall sensor support"
+	help
+	  Say Y to enable support for hall sensor.
