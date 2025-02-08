@@ -1,0 +1,110 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Google Comet touch device tree source
+ *
+ * Copyright 2023 Google LLC.
+ *
+ */
+
+&m_ldo25_reg {
+	regulator-min-microvolt = <1800000>;
+	regulator-max-microvolt = <1800000>;
+};
+
+&m_ldo4_reg {
+	regulator-min-microvolt = <3300000>;
+	regulator-max-microvolt = <3300000>;
+};
+
+/ {
+	fragment@touch_bus_negotiator {
+		target-path = "/";
+		__overlay__ {
+			tbn: tbn {
+				compatible = "touch_bus_negotiator";
+				tbn,mode = <2>;
+			};
+		};
+	};
+};
+
+&pinctrl_1 {
+	inner_ts_irq: inner-ts-irq {
+		samsung,pins = "gpn0-0";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <ZUMA_PIN_DRV_X1>;
+	};
+};
+
+&pinctrl_12 {
+	inner_ts_reset: inner-ts-reset {
+		samsung,pins = "gpp21-2";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+};
+
+&spi_20 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	dma-mode;
+	dmas = <&pdma1 18 &pdma1 19>;
+	swap-mode = <1>;
+	pinctrl-0 = <>;
+
+	inner_touch: touchscreen@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		reg = <0>;
+
+		vdd-supply = <&m_ldo25_reg>;
+		avdd-supply = <&m_ldo4_reg>;
+		status = "ok";
+		compatible = "goodix,brl-b";
+
+		pinctrl-names = "ts_active", "ts_suspend";
+		pinctrl-0 = <&inner_ts_irq &inner_ts_reset>;
+		pinctrl-1 = <>;
+		spi-max-frequency = <10000000>;
+
+		goodix,dev-id = <0>;
+		goodix,irq-gpio = <&gpn0 0 0>;
+		goodix,reset-gpio = <&gpp21 2 0>;
+		goodix,avdd-name = "avdd";
+		goodix,iovdd-name = "vdd";
+		goodix,irq-flags = <2>; /* 1:trigger rising, 2:trigger falling;*/
+		goodix,panel-max-x = <2151>;
+		goodix,panel-max-y = <2075>;
+		goodix,panel-max-w = <255>;
+		goodix,panel-max-p = <255>;
+		goodix,panel-height-mm = <146>;
+		goodix,sleep-enable;
+		goodix,use-one-binary;
+
+		goog,panel_map = <&google_gs_ct3a 0>;
+
+		goog,firmware_names = "goodix_firmware.bin";
+		goodix,firmware-name = "goodix_firmware.bin";
+
+		goog,config_names = "goodix_cfg_group.bin";
+		goodix,config-name = "goodix_cfg_group.bin";
+
+		goog,test_limits_names = "goodix_test_limits.csv";
+		goodix,test-limits-name = "goodix_test_limits.csv";
+
+		goog,dev-id = <0>;
+		goog,display-resolution = /bits/ 16 <2152 2076>;
+		goog,channel-num = /bits/ 16 <38 39>;
+
+		controller-data {
+			samsung,spi-feedback-delay = <0>;
+			samsung,spi-chip-select-mode = <0>;
+		};
+	};
+};
+
+&google_gs_ct3a {
+	touch = <&inner_touch>;
+};

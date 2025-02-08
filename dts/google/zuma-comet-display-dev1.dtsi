@@ -1,0 +1,53 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * comet display device tree source
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+&drmdsim0 {
+	te_from = <1>;
+	/* EINT for TE */
+	te-gpio = <&gpp0 4 0xf>;
+
+	panel@0 {
+		/* reset, power */
+		reset-gpios = <&gpp12 0 GPIO_ACTIVE_HIGH>;
+	};
+	panel@1 {
+		/* reset, power */
+		reset-gpios = <&gpp12 0 GPIO_ACTIVE_HIGH>;
+	};
+	panel@2 {
+		/* reset, power */
+		reset-gpios = <&gpp12 0 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&drmdsim1 {
+	te_from = <0>;
+	/* EINT for TE */
+	te-gpio = <&gpp0 3 0xf>;
+
+	panel@0 {
+		/* reset, power */
+		reset-gpios = <&gpa6 0 GPIO_ACTIVE_HIGH>;
+	};
+	panel@1 {
+		/* reset, power */
+		reset-gpios = <&gpa6 0 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&disp_vddr_0 {
+	gpio = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+};
+
+
+&hsi2c6_bus {
+	/* remove gpp12_0 from hsi2c6_bus, since it controls reset-gpios */
+	samsung,pins = "gpp12-1";
+};

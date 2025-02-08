@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * zumapro pmic device tree source
+ *
+ * Copyright 2024 Google LLC.
+ *
+ */
+
+&m_ext4_rail {
+	schematic-name = "VSYS_PWR_DISPLAY";
+	shunt-res-uohms = <5000>;
+};
