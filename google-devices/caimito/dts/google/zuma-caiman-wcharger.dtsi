@@ -1,0 +1,34 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Wireless Charger config for RA9530.
+ * Intended to be included into the approriate I2C bus.
+ *
+ * Copyright 2023 Google LLC
+ */
+
+&ra9530 {
+	/* HPP */
+	google,hpp_neg_pwr = <23000>;
+	google,epp_neg_pwr = <13500>;
+	google,wait_prop_irq_ms = <6000>;
+	/* RTx */
+	google,wcin_inlim_en = <&max77779_gpio 0 GPIO_ACTIVE_HIGH>;
+	idt,gpp-cmfet = <48>;
+	idt,has_rtx_gpio;
+	/* BPP ICL */
+	google,bpp_dcicl_default_ua = <550000>;
+	google,bpp_dcicl_ramp_ua = <700000>;
+	google,bpp_dcicl_lower_vout_ua = <700000>;
+	google,bpp_dcicl_lower_vout_ramp_ua = <800000>;
+
+	fod = [97 27 60 6E BB C8 8E 2C A1 E6 A6 CB C5 10 80 28];
+	fod_epp = [8B 4A 8A 2B BB 80 8F 26 90 18 96 FF A8 39 80 19];
+	google,q_value = <76>;
+	google,rf_value = <106>;
+	google,hpp_fod_vol = /bits/ 32 <16500000 17500000 18500000 19500000>;
+	fod_hpp_0 = [96 50 b7 80 92 2b 92 2c 91 21 95 f0 ad 34 80 28];
+	fod_hpp_1 = [a1 36 b7 d0 92 35 93 2f 91 2d 96 ed ad 40 80 28];
+	fod_hpp_2 = [aa 30 98 50 92 4d 93 47 90 53 97 fa a5 61 80 28];
+	fod_hpp_3 = [b4 20 a7 19 96 4a 93 60 90 71 96 27 a9 74 80 28];
+};
+

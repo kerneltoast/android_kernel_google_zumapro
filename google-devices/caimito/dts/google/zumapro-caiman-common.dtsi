@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Caiman board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+#include "zumapro-caimito-uwb.dtsi"
+#include "zuma-tokay-battery.dtsi"
+#include "zuma-komodo-caiman-charging.dtsi"
+#include "zuma-komodo-caiman-usecases.dtsi"
+#include "zuma-caiman-wcharger.dtsi"
+#include "zuma-caiman-audio.dtsi"
+#include "zuma-caiman-pmic.dtsi"
+#include "zuma-komodo-camera.dtsi"
+#include "zuma-caiman-display.dtsi"
+#include "zuma-caiman-touch.dtsi"
+#include "zuma-caiman-charging.dtsi"

@@ -1,0 +1,58 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Display nodes for caimito boards.
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+&drmdsim0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	panel@0 {
+		touch = <&spitouch>;
+	};
+
+	panel@1 {
+		compatible = "samsung,emul";
+		label = "samsung-emul";
+		channel = <0>;
+
+		/* reset, power */
+		reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&drmdsim1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	/* If used, override it in product dtsi */
+	status = "disabled";
+};
+
+&disp_vddd {
+	status = "okay";
+	gpio = <&gpp21 4 GPIO_ACTIVE_HIGH>;
+};
+
+&drmdp {
+	status = "okay";
+	aux-orientation = "auto";
+};
+
+&drmdecon0 {
+	status = "okay";
+};
+
+&drmdecon1 {
+	status = "okay";
+	connector = <0x10>;
+};
+
+&drmdecon2 {
+	status = "disabled";
+};

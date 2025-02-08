@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries for Zuma24 with sapwood
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+#include "zuma-ripcurrent24-battery.dtsi"
+#include "google-dts-zuma/zuma-max777xx_fwupdate.dtsi"
+
+&google_battery {
+	google,fg-psy-name = "max77779fg";
+ };
+
+&max77729_pmic {
+	status = "disabled";
+};
+
+&max77759_fg {
+	status = "disabled";
+};
+
+&max77759_chg {
+	status = "disabled";
+};
+
+&max77779_fg {
+	status = "okay";
+};
+
+&max77779_chg {
+	status = "okay";
+};
+
+&max77779_sp {
+	status = "okay";
+};
+
+&max77779_pmic {
+	status = "okay";
+};
+
+&max77779_fg {
+	maxim,fg-data {
+		#include "zuma-komodo-battery-data.dtsi"
+		#include "google-dts-zuma/zuma-1p5c-battery-data.dtsi"
+	};
+};
+
+&max77779_vimon {
+	status = "okay";
+};
+
+&max77779_fwupdate {
+	status = "okay";
+};

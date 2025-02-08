@@ -1,0 +1,9 @@
+#
+# Caimito specific modules loaded during first stage init from vendor_kernel_boot
+# (platform common modules are from vendor_kernel_boot_modules.zumapro)
+#
+panel-gs-cm4.ko
+panel-gs-km4.ko
+panel-gs-tk4a.ko
+panel-gs-tk4b.ko
+panel-gs-tk4c.ko

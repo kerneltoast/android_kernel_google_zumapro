@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Samsung CP interface device tree source
+ *
+ * Copyright (c) 2023 Samsung Electronics Co., Ltd.
+ *             http://www.samsung.com
+ */
+
+#include "google-dts-zuma/zuma-board-cp-s5300-sit.dtsi"
+
+/ {
+	fragment@modemif {
+		target-path = "/";
+		__overlay__ {
+			cpif {
+				mif,name = "s5400";
+				pci_db_addr = <0x0>;
+			};
+		};
+	};
+};

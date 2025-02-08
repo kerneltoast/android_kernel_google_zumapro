@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Ripcurrent24 board device tree source
+ *
+ * Copyright 2022 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include "zuma-24-common.dtsi"
+#include "google-dts-zumapro/zumapro-board-ignss.dtsi"
+#include "zuma-ripcurrent24-ultrasonic-udfps.dtsi"
+#include "zuma-ripcurrent24-battery.dtsi"
+#include "google-dts-zuma/zuma-board-bcl.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-charging.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-usecases.dtsi"
+#include "zuma-ripcurrent24-display.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-wcharger.dtsi"
+#include "google-dts-ripcurrent/zuma-ripcurrent-typec.dtsi"
+
+/ {
+	board_id = <0x40701>;
+	board_rev = <0x010000>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA Ripcurrent24 board based on ZUMA";
+			compatible = "google,ZUMA Ripcurrent24", "google,ZUMA";
+		};
+	};
+};

@@ -1,0 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Sapwood Komodo/Caiman board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+#include "zuma-ripcurrent24-sapwood-komodo-caiman-charging.dtsi"
+#include "zuma-komodo-caiman-usecases.dtsi"

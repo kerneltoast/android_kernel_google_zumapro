@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Zuma24 with Sapwood board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+#include "zuma-24-common.dtsi"
+#include "zuma-ripcurrent24-sapwood-caimito-battery.dtsi"
+#include "zuma-caimito-bcl.dtsi"
+#include "zuma-ripcurrent24-sapwood-caimito-charging.dtsi"
+#include "zuma-ripcurrent24-sapwood-caimito-typec.dtsi"
+#include "zuma-ripcurrent24-sapwood-wcharger.dtsi"
+#include "zuma-caimito-usecases-evt.dtsi"

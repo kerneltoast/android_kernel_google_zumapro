@@ -1,0 +1,49 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Copyright (C) 2023, Google LLC
+ *
+ * Type-C device tree
+ */
+#include <dt-bindings/usb/pd.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/zuma.h>
+#include <arm64/exynos/exynos-pinctrl.h>
+
+&hsi2c_6 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+#include "google-dts-zuma/max777x9-tcpc.dtsi"
+};
+
+&max77759tcpc {
+	bcl-usb-voting;
+	pinctrl-0 = <&usb_pd_irq>;
+	pullup-supply = <&m_ldo19_reg>;
+	ext-bst-ovp-clear-mv = <10000>;
+	connector {
+		sink-pdos = <PDO_FIXED(5000, 3000,
+				       PDO_FIXED_DATA_SWAP |
+				       PDO_FIXED_USB_COMM |
+				       PDO_FIXED_HIGHER_CAP |
+				       PDO_FIXED_DUAL_ROLE)
+			     PDO_FIXED(9000, 2200, 0)
+			     PDO_PPS_APDO(5000, 21000, 3000)>;
+	};
+};
+
+&hsi2c6_bus {
+	samsung,pins = "gpp12-0", "gpp12-1";
+	samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+};
+
+&pinctrl_0 {
+	usb_pd_irq: usb-pd-irq {
+		samsung,pins = "gpa8-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <ZUMA_PIN_DRV_X1>;
+	};
+};
+
+#include "google-dts-zuma/max777x9-usbc-cooling-dev.dtsi"
