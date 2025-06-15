@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Samsung CP interface device tree source
+ *
+ * Copyright (c) 2023 Samsung Electronics Co., Ltd.
+ *             http://www.samsung.com
+ */
+
+/ {
+	fragment@modemif {
+		target-path = "/";
+		__overlay__ {
+			cpif {
+				pinctrl-0 = <&s5100_ap2cp_cp_pwr_on>,
+					<&s5100_ap2cp_cp_nreset_n>,
+					<&s5100_cp2ap_cp_ps_hold>,
+					<&s5100_ap2cp_wakeup>,
+					<&s5100_cp2ap_wakeup>,
+					<&s5100_ap2cp_dump_noti>,
+					<&s5100_ap2cp_pda_active>,
+					<&s5100_cp2ap_phone_active>,
+					<&s5100_ap2cp_cp_wrst_n>,
+					<&s5100_cp2ap_cp_wrst_n_pre_dvt>,
+					<&s5100_ap2cp_pm_wrst_n>,
+					<&s5100_ap2cp_partial_rst_n>;
+
+				/* Definition of GPIOs */
+				gpio_cp2ap_cp_wrst_n =  <&gpp8 2 0x1>;
+
+			};
+		};
+	};
+};

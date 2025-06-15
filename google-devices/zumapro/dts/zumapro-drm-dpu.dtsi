@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Zuma Pro SoC device tree source
+ *
+ * Copyright (c) 2023 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com
+ *
+ */
+
+#include "zuma/zuma-drm-dpu.dtsi"
+
+&drmdsim0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	/* EINT for TOUT (TE2) */
+	tout-gpio = <&gpp14 1 0>;
+};
+
+&drmdecon0 {
+	bw_lat_rd_map = <
+		1000000		3072
+		1250000		2458
+		1500000		2048
+		1750000		1755
+		2000000		1536
+		2250000		1365
+		2500000		1229
+		3000000		1024
+		3500000		 878
+	>;
+};
