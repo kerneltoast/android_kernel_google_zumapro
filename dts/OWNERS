@@ -1,0 +1,6 @@
+# Do not inherit owners defined for carveout and dmaheap memory
+per-file zumapro-rmem.dtsi, zumapro-dma-heap.dtsi = set noparent
+
+# Set owners for the carveout and dmaheap memory
+per-file zumapro-rmem.dtsi, zumapro-dma-heap.dtsi = minchan@google.com, liumartin@google.com, wvw@google.com
+per-file zumapro-rmem.dtsi, zumapro-dma-heap.dtsi = file:kernel/manifest:/OWNERS_pixel_codebase
