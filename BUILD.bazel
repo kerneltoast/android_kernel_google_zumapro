@@ -1,0 +1,113 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load("//build/kernel/kleaf:kernel.bzl", "ddk_headers", "ddk_module")
+
+package(
+    default_visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+_PANEL_LOCAL_DEFINES = [
+    "DYNAMIC_DEBUG_MODULE",
+] + select({
+    "//private/devices/google/common:factory_build": ["PANEL_FACTORY_BUILD"],
+    "//conditions:default": [],
+})
+
+ddk_headers(
+    name = "common_headers",
+    hdrs = [
+        "//common:all_headers_aarch64",
+        "//private/google-modules/display/common:ddk_headers",
+    ],
+    visibility = ["//visibility:private"],
+)
+
+# Note: please add additional drivers as separate ddk modules
+
+ddk_module(
+    name = "panel-gs-km4",
+    srcs = [
+        "panel-gs-km4.c",
+    ],
+    out = "panel-gs-km4.ko",
+    kernel_build = "//private/devices/google/common:kernel",
+    local_defines = _PANEL_LOCAL_DEFINES,
+    deps = [
+        ":common_headers",
+        "//private/google-modules/display/common/gs_drm",
+        "//private/google-modules/display/common/gs_panel",
+    ],
+)
+
+ddk_module(
+    name = "panel-gs-cm4",
+    srcs = [
+        "panel-gs-cm4.c",
+    ],
+    out = "panel-gs-cm4.ko",
+    kernel_build = "//private/devices/google/common:kernel",
+    local_defines = _PANEL_LOCAL_DEFINES,
+    deps = [
+        ":common_headers",
+        "//private/google-modules/display/common/gs_drm",
+        "//private/google-modules/display/common/gs_panel",
+    ],
+)
+
+ddk_module(
+    name = "panel-gs-tk4a",
+    srcs = [
+        "panel-gs-tk4a.c",
+    ],
+    out = "panel-gs-tk4a.ko",
+    kernel_build = "//private/devices/google/common:kernel",
+    local_defines = _PANEL_LOCAL_DEFINES,
+    deps = [
+        ":common_headers",
+        "//private/google-modules/display/common/gs_panel",
+    ],
+)
+
+ddk_module(
+    name = "panel-gs-tk4b",
+    srcs = [
+        "panel-gs-tk4b.c",
+    ],
+    out = "panel-gs-tk4b.ko",
+    kernel_build = "//private/devices/google/common:kernel",
+    local_defines = _PANEL_LOCAL_DEFINES,
+    deps = [
+        ":common_headers",
+        "//private/google-modules/display/common/gs_panel",
+    ],
+)
+
+ddk_module(
+    name = "panel-gs-tk4c",
+    srcs = [
+        "panel-gs-tk4c.c",
+    ],
+    out = "panel-gs-tk4c.ko",
+    kernel_build = "//private/devices/google/common:kernel",
+    local_defines = _PANEL_LOCAL_DEFINES,
+    deps = [
+        ":common_headers",
+        "//private/google-modules/display/common/gs_panel",
+    ],
+)
+
+ddk_module(
+    name = "panel-gs-tk4c-test",
+    srcs = [
+        "panel-gs-tk4c-test.c",
+    ],
+    out = "panel-gs-tk4c-test.ko",
+    kernel_build = "//private/devices/google/common:kernel",
+    local_defines = _PANEL_LOCAL_DEFINES,
+    deps = [
+        ":common_headers",
+        "//private/google-modules/display/common/gs_panel",
+    ],
+)
