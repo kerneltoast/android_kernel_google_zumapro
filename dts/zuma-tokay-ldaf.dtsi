@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Tokay ldaf(Laser Detection Auto Focus) device tree source
+ *
+ * Copyright 2023 Google LLC.
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+&s_ldo26_reg {
+	regulator-min-microvolt = <3300000>;
+	regulator-max-microvolt = <3300000>;
+};
+
+&pinctrl_1 {
+	ldaf_irq: ldaf-irq {
+		samsung,pins = "gpn3-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+	};
+};
+
+&hsi2c_19 {
+	status = "ok";
+	#address-cells = <1>;
+	#size-cells = <0>;
+	stmvl53l1: stmvl53l1@29 {
+		compatible = "st,stmvl53l1";
+		reg = <0x29>;
+
+		/* VADD 3.3V */
+		pwren-supply = <&s_ldo26_reg>;
+
+		/* RESET: GPN2[0] */
+		xsdn-gpio = <&gpn2 0 GPIO_ACTIVE_HIGH>;
+
+		/* IRQ: GPN3[0] */
+		intr-gpio = <&gpn3 0 GPIO_ACTIVE_HIGH>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&ldaf_irq>;
+
+		status = "ok";
+	};
+};

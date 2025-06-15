@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries for Zuma24 with sapwood
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+&google_battery {
+	google,batt-id-1-atl {
+		google,batt-id = <1>;
+		/* simulate 1.5C charge: 3270 x 1.5 ~ 4905 (R4) */
+		google,chg-battery-capacity = <3270>;
+		google,chg-cv-limits = <4200000 4300000 4350000 4450000>;
+	};
+
+	google,batt-id-A {
+		google,batt-id = <10>;
+		google,chg-battery-capacity = <5138>;
+		google,chg-cv-limits = <4200000 4300000 4350000 4480000>;
+		google,pullback-current;
+	};
+
+	google,batt-fake {
+		google,batt-id = <255>;
+		google,chg-battery-capacity = <5138>;
+		google,chg-cv-limits = <4200000 4300000 4350000 4480000>;
+		google,pullback-current;
+	};
+};

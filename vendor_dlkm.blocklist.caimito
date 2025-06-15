@@ -1,0 +1,8 @@
+blocklist bcmdhd4390
+blocklist cs40l26_i2c
+blocklist gs-panel-common-test.ko
+blocklist panel-gs-tk4c-test.ko
+blocklist pwm_exynos
+blocklist rt4539_bl
+blocklist sec_touch
+blocklist syna_touch

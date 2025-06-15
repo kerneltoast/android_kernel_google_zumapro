@@ -1,0 +1,70 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Display nodes for komodo-related boards.
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include "zuma-komodo-connector.dtsi"
+
+&dsim_modes {
+	dsim-modes {
+		1008x2244 {
+			mode-name = "1008x2244";
+			pmsk = <
+				0x1 0x6F 0x2 0x5400 /* p m s k */
+				>;
+			hs-clk = <1368>;
+			esc-clk = <20>;
+		};
+		1344x2992 {
+			mode-name = "1344x2992";
+			pmsk = <
+				0x1 0x6F 0x2 0x5400 /* p m s k */
+				>;
+			hs-clk = <1368>;
+			esc-clk = <20>;
+		};
+	};
+};
+
+&drmdsim0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			/* output */
+			dsim0_connector_out: endpoint {
+				remote-endpoint = <&dsim0_connector_in>;
+			};
+		};
+	};
+};
+
+&disp_vddd {
+	status = "okay";
+	gpio = <&gpp21 4 GPIO_ACTIVE_HIGH>;
+};
+
+&m_ldo14_reg {
+	regulator-min-microvolt = <3100000>;
+	regulator-max-microvolt = <3100000>;
+};
+
+&drmdecon0 {
+	bts_scen_name = "dpu_qurgent_default";
+	bts_scen_min_panel_width = <1344>;
+	bts_scen_min_panel_height = <2992>;
+	bts_scen_min_fps = <120>;
+	bts_scen_min_rt = <1930198>;
+	bts_scen_max_rt = <3494400>;
+	bts_scen_min_peak = <0>;
+	bts_scen_max_peak = <5553600>;
+	bts_scen_skip_with_video;
+};

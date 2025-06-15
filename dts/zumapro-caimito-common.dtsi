@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Zuma24 board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+#include "zumapro/zumapro-common.dtsi"
+
+#include "zuma-caimito-battery.dtsi"
+#include "zuma-caimito-camera-pmic.dtsi"
+#include "zuma-caimito-charging.dtsi"
+#include "zuma-caimito-display.dtsi"
+#include "zuma/zuma-ripcurrent-gsa-gsc.dtsi"
+#include "zuma-caimito-wcharger.dtsi"
+#include "zuma-caimito-wlan.dtsi"
+#include "zumapro/zumapro-board-cp-s5400-sit.dtsi"
+#include "zumapro/zumapro-board-bluetooth.dtsi"
+#include "zuma-caimito-ese.dtsi"
+#include "zuma-caimito-nfc.dtsi"
+#include "zuma/zuma-board-ultrasonic-udfps.dtsi"
+#include "zuma-caimito-audio.dtsi"
+#include "zuma-caimito-common-touch.dtsi"
+#include "zumapro/zumapro-board-pcie.dtsi"
+#include "zumapro/zumapro-board-pcie-cp-s5400-a1.dtsi"
+#include "zumapro-caimito-haptics.dtsi"
+#include "zuma-caimito-thermal.dtsi"
+#include "zuma-caimito-usb.dtsi"
+#include "zuma-caimito-typec.dtsi"
+#include "zumapro-caimito-bcl.dtsi"
+#include "zumapro-caimito-usecases.dtsi"
+#include "zumapro/zumapro-cp-s5400-thermal-zone.dtsi"
+#include "zumapro-caimito-sbbm.dtsi"
+#include "zuma/gs101-faceauth-dma-heap.dtsi"
+#include "zumapro/zumapro-16kb-dma-heap.dtsi"

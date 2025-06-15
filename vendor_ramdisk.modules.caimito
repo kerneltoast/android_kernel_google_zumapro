@@ -1,0 +1,15 @@
+extra/private/google-modules/display/common/panels/panel-gs-simple.ko
+extra/private/google-modules/display/panels/caimito/panel-gs-cm4.ko
+extra/private/google-modules/display/panels/caimito/panel-gs-km4.ko
+extra/private/google-modules/display/panels/caimito/panel-gs-tk4a.ko
+extra/private/google-modules/display/panels/caimito/panel-gs-tk4b.ko
+extra/private/google-modules/display/panels/caimito/panel-gs-tk4c.ko
+extra/private/google-modules/gps/broadcom/bcm47765/bcm47765.ko
+extra/private/google-modules/nfc/st21nfc.ko
+extra/private/google-modules/nfc/ese/st54spi.ko
+extra/private/google-modules/radio/samsung/s5400/shm_ipc.ko
+extra/private/google-modules/radio/samsung/s5400/cpif_page.ko
+extra/private/google-modules/radio/samsung/s5400/cpif.ko
+extra/private/google-modules/radio/samsung/s5400/cp_pmic.ko
+extra/private/google-modules/touch/common/touch_bus_negotiator.ko
+extra/private/google-modules/touch/common/touch_offload.ko

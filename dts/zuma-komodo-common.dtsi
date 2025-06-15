@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Komodo board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+#include "zuma-caimito-uwb.dtsi"
+#include "zuma-komodo-battery.dtsi"
+#include "zuma-komodo-caiman-charging.dtsi"
+#include "zuma-komodo-caiman-usecases.dtsi"
+#include "zuma-komodo-wcharger.dtsi"
+#include "zuma-komodo-audio.dtsi"
+#include "zuma-komodo-pmic.dtsi"
+#include "zuma-komodo-camera.dtsi"
+#include "zuma-komodo-display.dtsi"
+#include "zuma-komodo-touch.dtsi"
+#include "zuma-komodo-charging.dtsi"

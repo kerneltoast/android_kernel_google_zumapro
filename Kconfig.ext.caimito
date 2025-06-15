@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0
+
+source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/display/common/Kconfig"
+
+source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/fingerprint/qcom/qfs4008/Kconfig"
+
+source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/radio/samsung/s5400/Kconfig"
+
+source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/touch/common/Kconfig"
+
+source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/touch/sec/Kconfig"

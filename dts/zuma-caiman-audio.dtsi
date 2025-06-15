@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * caiman audio device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+&aoc {
+	aoc-board-cfg = "CM4";
+	aoc-board-id = <0x40902>;
+	aoc-board-rev = <0x10000>;
+	prevent-fw-load = <0x0>;
+};
+

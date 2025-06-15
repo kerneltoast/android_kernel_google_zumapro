@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Copyright (C) 2023 Google LLC
+
+build:caimito --//private/devices/google/common:kernel=//private/devices/google/caimito:kernel
+build:caimito --//private/google-modules/soc/gs:gs_soc_module=//private/devices/google/caimito:zumapro_soc.caimito
+build:caimito --//private/google-modules/touch/common:touch_udfps_notification=enabled
