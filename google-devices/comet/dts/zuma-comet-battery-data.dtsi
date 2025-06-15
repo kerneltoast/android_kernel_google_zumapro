@@ -1,0 +1,100 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+max77779,config {
+
+	/* CT3-B_ATL_RC2_BC79_2mOhm_3521_2_090523_20240401.model.ini.txt, b/332397741#comment3 */
+	max77779,atl-1k {
+		max77779,batt-id-kohm = <1>;
+		max77779,model-version = <7>;
+		max77779,force-reset-model-data;
+		max77779,fg-model = /bits/ 16 <
+			0xa500 0xb6f0 0xb990 0xbac0 0xbda0 0xbef0 0xc1d0 0xc410
+			0xc790 0xca30 0xcd80 0xd0d0 0xd440 0xd7b0 0xdb40 0xe010
+			0x0100 0x0e10 0x11c0 0x0b20 0x21d0 0x0de0 0x09e0 0x06e0
+			0x07c0 0x06c0 0x06d0 0x06f0 0x05f0 0x07f0 0x05e0 0x05e0
+		>;
+		max77779,fg-params = /bits/ 16 <
+			/* 0x00C0 */	0xc1b0	/* nNVCfg0 */
+			/* 0x00B6 */	0x043b	/* RelaxCFG */
+			/* 0x009F */	0x260e	/* nLearnCFG */
+			/* 0x000C */	0x4207	/* Config */
+			/* 0x00AB */	0x0080	/* Config2 */
+			/* 0x00BC */	0x5f00	/* nFullSOCthr */
+			/* 0x00A9 */	0x01e2	/* nFullCAPRep */
+			/* 0x00B3 */	0x01e2	/* nDesignCap */
+			/* 0x0046 */	0x0c80	/* dPacc */
+			/* 0x00A5 */	0x01e2	/* nFullCAPNom */
+			/* 0x00C6 */	0xa55a	/* nV_empty */
+			/* 0x00A0 */	0x4c08	/* nQRTable00 */
+			/* 0x00A1 */	0x2382	/* nQRTable10 */
+			/* 0x00A2 */	0x0f00	/* nQRTable20 */
+			/* 0x00A3 */	0x0d00	/* nQRTable30 */
+			/* 0x00A6 */	0x0560	/* nRCOMP0 */
+			/* 0x00A7 */	0x1602	/* nTempCo */
+			/* 0x009C */	0x0097	/* nIChgTerm */
+			/* 0x00B2 */	0x3870	/* nMiscCFG */
+			/* 0x009E */	0x0400	/* nModelCfg */
+			/* 0x00CA */	0xC8FF	/* nThermCfg */
+			/* 0x009D */	0xCEB5	/* nFilterCfg */
+		>;
+		max77779,fg-aafv = /bits/ 32 <
+			200     0   95  0xff
+			400    20   90  0xff
+			600    40   85  0xff
+			800    60   80  0xff
+			1000   80   75  0xff
+			2000  100   70  0xff
+		>;
+	};
+
+	/* CT3-B_COS_RC2_BC79_2mOhm_3520_1_090523_20240401.model.ini.txt, b/332397741#comment3 */
+	max77779,cos-2k {
+		max77779,batt-id-kohm = <2>;
+		max77779,model-version = <7>;
+		max77779,force-reset-model-data;
+		max77779,fg-model = /bits/ 16 <
+			0xa500 0xb6d0 0xbac0 0xbc20 0xbd10 0xbee0 0xc0e0 0xc310
+			0xc560 0xc7e0 0xca10 0xce00 0xd130 0xd4e0 0xd980 0xdf40
+			0x0170 0x0780 0x1800 0x1610 0x0e80 0x10b0 0x0c90 0x0890
+			0x06c0 0x06c0 0x06e0 0x0690 0x06e0 0x06a0 0x0810 0x0810
+		>;
+		max77779,fg-params = /bits/ 16 <
+			/* 0x00C0 */	0xc1b0	/* nNVCfg0 */
+			/* 0x00B6 */	0x043b	/* RelaxCFG */
+			/* 0x009F */	0x260e	/* nLearnCFG */
+			/* 0x000C */	0x4207	/* Config */
+			/* 0x00AB */	0x0080	/* Config2 */
+			/* 0x00BC */	0x5f00	/* nFullSOCthr */
+			/* 0x00A9 */	0x01e2	/* nFullCAPRep */
+			/* 0x00B3 */	0x01e2	/* nDesignCap */
+			/* 0x0046 */	0x0c80	/* dPacc */
+			/* 0x00A5 */	0x01e2	/* nFullCAPNom */
+			/* 0x00C6 */	0xa55a	/* nV_empty */
+			/* 0x00A0 */	0x3205	/* nQRTable00 */
+			/* 0x00A1 */	0x1782	/* nQRTable10 */
+			/* 0x00A2 */	0x0a00	/* nQRTable20 */
+			/* 0x00A3 */	0x0880	/* nQRTable30 */
+			/* 0x00A6 */	0x04d0	/* nRCOMP0 */
+			/* 0x00A7 */	0x1c02	/* nTempCo */
+			/* 0x009C */	0x0097	/* nIChgTerm */
+			/* 0x00B2 */	0x3870	/* nMiscCFG */
+			/* 0x009E */	0x0400	/* nModelCfg */
+			/* 0x00CA */	0xC8FF	/* nThermCfg */
+			/* 0x009D */	0xCEB5	/* nFilterCfg */
+		>;
+		max77779,fg-aafv = /bits/ 32 <
+			200     0   95  0xff
+			400    20   90  0xff
+			600    40   85  0xff
+			800    60   80  0xff
+			1000   80   75  0xff
+			2000  100   70  0xff
+		>;
+	};
+};

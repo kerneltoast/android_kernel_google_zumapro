@@ -1,0 +1,47 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Wireless Charger config for P9222.
+ * Intended to be included into the approriate I2C bus.
+ *
+ * Copyright 2023 Google LLC
+ */
+p9222: p9222@61 {
+	status = "disabled";
+	compatible = "idt,p9222";
+	reg = <0x61>;
+
+
+	/* Support p9412 GPIO */
+	idt,has_p9412_gpio;
+
+	idt,has_rtx = <0>;
+
+	google,power_mitigate_threshold = <90>;
+	google,has-sw-ramp;
+	google,epp_dcicl_default_ma = <750000>;
+	google,bpp_dcicl_default_ua = <500000>;
+	google,tx2767_icl_ua = <600000>;
+	google,bpp-freq108-disable-ramp;
+	google,wcin_inlim_en = <&max77779_gpio 0 GPIO_ACTIVE_HIGH>;
+
+	pinctrl-names = "default";
+
+	idt,max_vout_mv = <10000>;  /* max voltage in mV */
+
+	google,magsafe-optimized;
+	google,q_value = <55>;
+	google,tx2356_q = <40>;
+	google,rf_value = <91>;
+	google,lowest-freq-limit-khz = <121>;
+	google,iop_fod_mfg = [00B3];
+	fod = [A6 25 6C 4B 97 14 91 1E AC D6 A5 E9 00 00 00 28];
+	fod_epp = [93 42 79 6E 98 11 92 1A 94 07 A5 89 00 00 00 28];
+	fod_epp_iop = [93 42 79 6E 98 11 92 1A 94 34 A5 89 00 00 00 28];
+	fod_gpp = [93 4D 7B 68 98 21 92 2A 94 17 A5 99 00 00 00 28];
+
+	p9xxx_gpio: p9xxx_gpio {
+		gpio-controller;
+		#gpio-cells = <2>;
+		ngpios = <16>;
+	};
+};

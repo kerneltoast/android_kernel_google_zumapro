@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * USB device tree source code for Zuma SoC
+ *
+ * Copyright 2023 Google LLC.
+ */
+
+&eusb {
+       status = "disable";
+};
+
+&hsi2c_11 {
+       #address-cells = <1>;
+       #size-cells = <0>;
+       status = "okay";
+       eusb-repeater@3E {
+               compatible = "samsung,eusb-repeater";
+               reg = <0x3E>;
+               status = "okay";
+               pinctrl-names = "init_state";
+               pinctrl-0 = <&eusb_init_state>;
+               eusb,gpio_eusb_resetb = <&gpp21 3 GPIO_ACTIVE_LOW>;
+               repeater_tune_param = <&eusb_repeater_tune>;
+       };
+};

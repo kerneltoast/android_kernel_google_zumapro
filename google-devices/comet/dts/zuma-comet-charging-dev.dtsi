@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries specific to comet
+ *
+ * Copyright 2022 Google LLC
+ *
+ */
+
+&pinctrl_2 {
+/* [MAX17201 : INTB] > ALRT_GAUGE_M > [XEINT_5] */
+	alrt_gauge_m_irq: alrt-gauge-m-irq {
+		samsung,pins = "gpa5-5"; /* XEINT_5 */
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <ZUMA_PIN_DRV_X1>;
+	};
+};
+
+&hsi2c_9 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	#include "zuma/zuma-max1720x-fg.dtsi"
+};
+
+&max1720x_fg {
+	pinctrl-0 = <&alrt_gauge_m_irq>;
+	maxim,irq-gpio = <&gpa5 5 GPIO_ACTIVE_LOW>;
+};

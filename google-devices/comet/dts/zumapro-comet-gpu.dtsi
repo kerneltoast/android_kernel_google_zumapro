@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Comet board device tree source
+ *
+ * Copyright 2024 Google LLC
+ */
+
+&mali {
+	cores_suspend_hysteresis_time_ms = <220>;
+};

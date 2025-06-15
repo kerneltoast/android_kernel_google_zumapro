@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Comet board device tree source
+ *
+ * Copyright 2024 Google LLC
+ */
+
+#include "zumapro/zumapro-common.dtsi"
+
+#include "zuma-comet-aoc.dtsi"
+#include "zuma/zuma-ripcurrent-gsa-gsc.dtsi"
+#include "zuma/zuma-ripcurrent-touch.dtsi"
+#include "zumapro/zumapro-board-bluetooth.dtsi"
+#include "zuma-comet-display.dtsi"
+#include "zuma-comet-ese.dtsi"
+#include "zuma-comet-nfc.dtsi"
+#include "zuma/zuma-board-pcie.dtsi"
+#include "zuma-comet-hall-sensor.dtsi"
+#include "zuma-comet-haptics.dtsi"
+#include "zuma-comet-thermal.dtsi"
+#include "zuma-comet-usb.dtsi"
+#include "zumapro-comet-uwb.dtsi"
+#include "zuma-comet-battery-common.dtsi"
+#include "zuma-comet-battery.dtsi"
+#include "zuma-comet-charging.dtsi"
+#include "zumapro-comet-bcl.dtsi"
+#include "zumapro-comet-pmic.dtsi"
+#include "zumapro-comet-gpu.dtsi"
+#include "zuma/gs101-faceauth-dma-heap.dtsi"
+#include "zumapro-comet-sbbm.dtsi"

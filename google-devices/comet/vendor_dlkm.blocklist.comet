@@ -1,0 +1,7 @@
+blocklist bcmdhd4390
+blocklist cs40l26_i2c
+blocklist goodix_brl_touch
+blocklist pwm_exynos
+blocklist rt4539_bl
+blocklist sec_touch
+blocklist syna_touch

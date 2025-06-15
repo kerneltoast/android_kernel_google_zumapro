@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Google Comet-specific hall sensor device tree source
+ *
+ * Copyright 2023 Google, LLC.
+ */
+#include <dt-bindings/gpio/gpio.h>
+#include <arm64/exynos/exynos-pinctrl.h>
+&pinctrl_0 {
+	hall_sensor_pinctrl: hall_sensor_pinctrl {
+			samsung,pins ="gpa2-3";
+			samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+			samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+			samsung,pin-con-pdn = <EXYNOS_PIN_PDN_INPUT>;
+			samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+};
+/ {
+	fragment@hall {
+		target-path = "/";
+		__overlay__ {
+			hall_sensor:hall_sensor {
+				staus = "ok";
+				compatible = "hall,drv5032";
+				interrupt-parent = <&gpa2>;
+				interrupts = <4 0>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&hall_sensor_pinctrl>;
+				hall,gpio = <&gpa2 3 GPIO_ACTIVE_LOW>;
+			};
+		};
+	};
+};

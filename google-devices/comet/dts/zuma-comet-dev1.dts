@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Comet board device tree source
+ *
+ * Copyright 2024 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+#define ESIM_NO_CHIP_ENABLE_PIN
+#include "zuma-comet-common.dtsi"
+#include "zuma/zuma-typec.dtsi"
+#include "zuma/zuma-ripcurrent-typec.dtsi"
+#include "zuma/zuma-ripcurrent-battery.dtsi"
+#include "zuma/zuma-ripcurrent-charging.dtsi"
+#include "zuma-comet-display-dev1.dtsi"
+#include "zuma-comet-usb-dev1.dtsi"
+#include "zuma-comet-touch-dev1.dtsi"
+#include "zuma-comet-outer-touch-dev1.dtsi"
+#include "zuma-comet-haptics-dev1.dtsi"
+#include "zuma-comet-audio-dev1.dtsi"
+#include "zuma-comet-fingerprint-dev1.dtsi"
+#include "zuma/zuma-board-cp-s5300-sit.dtsi"
+#include "zuma-comet-battery-dev.dtsi"
+#include "zuma-comet-charging-dev.dtsi"
+#include "zuma-comet-usecases-dev.dtsi"
+#include "zuma-comet-wcharger-dev.dtsi"
+#include "zuma-comet-camera-pmic-dev1.dtsi"
+#include "zuma-comet-camera-dev1.dtsi"
+#include "zuma/zuma-board-wlan.dtsi"
+#include "zumapro/zumapro-board-gps.dtsi"
+#include "zuma-comet-uwb-dev1.dtsi"
+#include "zuma-comet-bcl.dtsi"
+
+/ {
+	board_id = <0x40601>;
+	board_rev = <0x010000>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA COMET DEV 1.0 board based on ZUMA";
+			compatible = "google,ZUMA COMET", "google,ZUMA";
+		};
+	};
+};

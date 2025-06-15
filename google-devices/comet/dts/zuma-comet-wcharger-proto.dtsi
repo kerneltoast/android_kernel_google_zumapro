@@ -1,0 +1,73 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Wireless Charger device tree entries.
+ *
+ * Copyright 2022 Google LLC
+ */
+
+#include <arm64/exynos/exynos-pinctrl.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	fragment@wlc {
+		target-path = "/";
+		__overlay__ {
+			google,charger {
+				google,wlc-power-supply = "wireless";
+			};
+		};
+	};
+};
+
+&max77779_pinctrl {
+	/* QI_INT_ODL Wireless Charger Interrupt */
+	wc_irq: wc_irq {
+		pins = "gpio4";
+		function = "gpio";
+		input-enable;
+		bias-pull-up;
+	};
+
+	/* QI_RX_COMM_EN_L Wireless Charger Enable */
+	wc_en: wc_en {
+		pins = "gpio1";
+		function = "gpio";
+		bias-disable;
+		output-low;
+	};
+
+	/* QI_PDET_GPOD6 */
+	det_int: det_int {
+		pins = "gpio2";
+		function = "gpio";
+		input-enable;
+		bias-pull-up;
+	};
+
+	/* QI_BPP_EPP_GPP_SLCT */
+	wc_slct: wc_slct {
+		pins = "gpio5";
+		function = "gpio";
+		bias-disable;
+		output-high;
+	};
+};
+
+&hsi2c_10 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	#include "zuma-wcharger-p9222.dtsi"
+};
+
+&p9222 {
+	status = "okay";
+	pinctrl-0 = <&wc_irq &wc_en &det_int &wc_slct>;
+
+	idt,gpio_wlc_en = <&max77779_sgpio 1 GPIO_ACTIVE_LOW>; /* QI_EN_L */
+	idt,gpio_qien = <&max77779_sgpio 1 GPIO_ACTIVE_LOW>; /* QI_EN_L */
+	idt,irq_det_gpio = <&max77779_sgpio 2 GPIO_ACTIVE_LOW>; /* QI_PDET_OD_L */
+	idt,irq_gpio = <&max77779_sgpio 4 GPIO_ACTIVE_LOW>; /* QI_INT_ODL */
+	idt,gpio_slct = <&max77779_sgpio 5 GPIO_ACTIVE_HIGH>; /* QI_BPP_EPP_SLCT */
+	idt,gpio_slct_value = <0>;
+};
