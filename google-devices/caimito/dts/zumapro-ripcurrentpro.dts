@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Ripcurrentpro board device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+/dts-v1/;
+/plugin/;
+
+
+#include "zumapro/zumapro-board-common.dtsi"
+#include "zuma/zuma-ripcurrent-camera-pmic.dtsi"
+#include "zuma/zuma-ripcurrent-camera.dtsi"
+#include "zumapro/zumapro-ripcurrentpro-usb.dtsi"
+/*
+#include "zuma-24-common.dtsi"
+#include "zuma-ripcurrent24-ultrasonic-udfps.dtsi"
+*/
+
+#include "zuma/zuma-ripcurrent-battery.dtsi"
+#include "zuma-ripcurrent24-battery.dtsi"
+#include "zuma/zuma-ripcurrent-charging.dtsi"
+#include "zuma/zuma-ripcurrent-usecases.dtsi"
+#include "zuma/zuma-ripcurrent-wcharger.dtsi"
+#include "zuma/zuma-typec.dtsi"
+#include "zuma/zuma-ripcurrent-typec.dtsi"
+#include "zuma/zuma-ripcurrent-gsa-gsc.dtsi"
+#include "zumapro/zumapro-board-bluetooth_legacy.dtsi"
+#include "zumapro/zumapro-board-ignss.dtsi"
+#include "zuma/zuma-board-nfc.dtsi"
+#include "zuma/zuma-board-ese.dtsi"
+#include "zumapro-ripcurrentpro-bcl-muirwood.dtsi"
+
+
+/ {
+	board_id = <0x60d01>;
+	board_rev = <0x010000>;
+	fragment@boardbase {
+		target-path = "/";
+		__overlay__ {
+			model = "ZUMA_PRO Ripcurrentpro board based on ZUMA_PRO";
+			compatible = "google,ZUMA_PRO Ripcurrentpro", "google,ZUMA_PRO";
+		};
+	};
+};

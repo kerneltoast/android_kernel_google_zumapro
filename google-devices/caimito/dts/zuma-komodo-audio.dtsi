@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * komodo audio device tree source
+ *
+ * Copyright 2023 Google LLC
+ */
+
+&aoc {
+	aoc-board-cfg = "KM4";
+	aoc-board-id = <0x40802>;
+	aoc-board-rev = <0x10000>;
+	prevent-fw-load = <0x0>;
+};
+

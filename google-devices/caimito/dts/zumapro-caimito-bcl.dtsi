@@ -1,0 +1,89 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Google ZumaPro/Caimito bcl device tree source
+ *
+ * Copyright (c) 2023 Google, LLC
+ *		https://www.google.com
+ */
+
+#include "zumapro/zumapro-board-bcl.dtsi"
+
+&pinctrl_11 {
+	bcl_rffe_modem: bcl-rffe-modem {
+		samsung,pins = "gpp11-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+	};
+	bcl_batoilo_modem: bcl-batoilo-modem {
+		samsung,pins = "gpp13-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+	};
+};
+&pinctrl_0  {
+	bcl_s_ocp_tpu: bcl-s-ocp-tpu {
+		samsung,pins = "gpa9-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+	};
+};
+
+&max77759tcpc {
+	bcl-usb-voting;
+};
+
+&google_mitigation {
+	google,ifpmic = <M77779>;
+	google,charger = <&max77779_chg>;
+	google,pmic = <&max77779_pmic>;
+	google,power-supply = <&max77779_fg>;
+	batoilo_lower = <1800>;
+	batoilo_upper = <8000>;
+	batoilo2_lower = <3800>;
+	batoilo2_upper = <10000>;
+	batoilo_otg_trig_lvl = <4800>;
+	batoilo2_otg_trig_lvl = <6800>;
+	batoilo_usb_trig_lvl = <4800>;
+	batoilo2_usb_trig_lvl = <6800>;
+	batoilo_wlc_trig_lvl = <5200>;
+	batoilo2_wlc_trig_lvl = <7000>;
+	batoilo_trig_lvl = <5200>;
+	batoilo2_trig_lvl = <7000>;
+	batoilo_otg_bat_open_to = <0x8>;    /* 36ms */
+	batoilo_bat_open_to = <0x8>;    /* 36ms */
+	batoilo2_bat_open_to = <0x3>;   /* 12ms */
+	batoilo_rel = <0x3>;   /* 10ms */
+	batoilo2_rel = <0x2>;   /* 1ms */
+	batoilo_det = <0x1A>;   /* 34ms DEBOUNCE to VDROOP */
+	batoilo2_det = <0x1>;   /* 30us DEBOUNCE to VDROOP */
+	batoilo_int_det = <0x2>;   /* 5ms */
+	batoilo2_int_det = <0x1>;   /* 30us */
+	batoilo_int_rel = <0x2>;   /* 1ms */
+	batoilo2_int_rel = <0x2>;   /* 1ms */
+	uvlo1_rel = <0x1>;   /* 1ms */
+	uvlo2_rel = <0x1>;   /* 1ms */
+	uvlo1_det = <0x1>;   /* 30us */
+	uvlo2_det = <0x1>;   /* 30us */
+	uvlo1_lvl = <0xA>;   /* 3.1V */
+	uvlo2_lvl = <0x8>;   /* 3.0V */
+	vimon_pwr_loop_thresh = <4000>; /* 4A pwr reduction thresh */
+	vimon_pwr_loop_cnt = <3>; /* 3 ibatt sample count */
+	uvlo1_vdrp1_en;
+	uvlo2_vdrp2_en;
+	oilo1_vdrp2_en;
+	oilo2_vdrp2_en;
+	vimon_pwr_loop_en;
+	vdroop_int_mask = <0xDF>;   /* BATOILO1 only */
+	intb_int_mask = <0x0>;   /* All passed */
+	evt_cnt_enable = <0x1>;
+	evt_cnt_rate = <0x0>;   /* 16k */
+	gpios = <&gpa9 5 GPIO_ACTIVE_HIGH>,		/* VDROOP1 */
+		<&gpa9 6 GPIO_ACTIVE_HIGH>,		/* VDROOP2 */
+		<&gpp11 0 GPIO_ACTIVE_HIGH>,
+		<&gpp13 0 GPIO_ACTIVE_HIGH>;
+	rffe_channel = <11>;
+	pinctrl-names = "bcl-rffe-modem", "bcl-batoilo-modem", "bcl-s-ocp-tpu";
+	pinctrl-0 = <&bcl_rffe_modem>;
+	pinctrl-1 = <&bcl_batoilo_modem>;
+	pinctrl-2 = <&bcl_s_ocp_tpu>;
+	interrupt-parent = <&max77779_pmic_irq>;
+	interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
+};
