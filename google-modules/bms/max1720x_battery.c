@@ -1468,7 +1468,7 @@ static int max1720x_find_entry(int *first_empty, int *first_misplaced, int *last
 static int max1720x_erase_history(int dst_entry)
 {
 	struct maxfg_eeprom_history hist_empty;
-	int ret, retry;
+	int ret = 0, retry;
 
 	memset(&hist_empty, 0xff, sizeof(hist_empty));
 	for (retry = 3; retry && ret != sizeof(hist_empty); retry--)
