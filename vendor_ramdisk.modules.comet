@@ -1,0 +1,15 @@
+extra/private/devices/google/comet/display/panel-gs-ct3a.ko
+extra/private/devices/google/comet/display/panel-gs-ct3b.ko
+extra/private/devices/google/comet/display/panel-gs-ct3c.ko
+extra/private/devices/google/comet/display/panel-gs-ct3d.ko
+extra/private/devices/google/comet/display/panel-gs-ct3e.ko
+extra/private/google-modules/gps/broadcom/bcm47765/bcm47765.ko
+extra/private/google-modules/nfc/st21nfc.ko
+extra/private/google-modules/nfc/ese/st54spi.ko
+extra/private/google-modules/radio/samsung/s5400/shm_ipc.ko
+extra/private/google-modules/radio/samsung/s5400/cpif_page.ko
+extra/private/google-modules/radio/samsung/s5400/cpif.ko
+extra/private/google-modules/radio/samsung/s5400/cp_pmic.ko
+extra/private/google-modules/sensors/hall_sensor/hall_sensor.ko
+extra/private/google-modules/touch/common/touch_bus_negotiator.ko
+extra/private/google-modules/touch/common/touch_offload.ko

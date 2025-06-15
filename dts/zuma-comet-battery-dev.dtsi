@@ -1,0 +1,71 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries specific to comet
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+#include "zuma/zuma-dual-battery-common.dtsi"
+
+/ {
+	fragment@battery {
+		target-path = "/";
+		__overlay__ {
+
+			google_battery: google,battery {
+				google,chg-battery-capacity = <4421>;
+
+				/* charge table */
+				google,chg-temp-limits = <0 100 200 420 460 480 550>;
+				google,chg-cv-limits = <4100000 4200000 4250000 4300000 4480000>;
+				google,chg-cc-limits = <
+					 30  30  10  10   0
+					 50  50  30  30  30
+					100 100 100  70  50
+					 80  80  50  50  50
+					 50  50  50   0   0
+					 30   0   0   0   0
+				>;
+
+				google,eeprom-pairing;
+			};
+
+			google_dual_batt_gauge: google,dual_batt_gauge {
+				google,chg-base-battery-capacity = <1154>;
+				google,chg-sec-battery-capacity = <3267>;
+
+				google,chg-pack-cc-limits = <
+				         30  30  10  10   0
+					 50  50  30  30  30
+					100 100 100  70  50
+					 80  80  50  50  50
+					 50  50  50   0   0
+					 30   0   0   0   0
+				>;
+			};
+
+			google_bms {
+				nvmem-names = "10-00500";
+				google,bee-name = "10-00500";
+			};
+
+		};
+	};
+};
+
+&max77759_fg {
+	maxim,dual-battery = "maxfg_base";
+	maxim,rc-enable;
+	maxim,rc-soc = <20>;
+	maxim,rc-temp = <50>;
+
+	maxim,filtercfg-temp = <100>;
+	maxim,filtercfg-temp-hysteresis = <30>;
+	maxim,filtercfg-default = /bits/ 16 <0xc624>;
+	maxim,filtercfg-adjust = /bits/ 16 <0xc617>;
+
+	maxim,fg-data {
+		#include "zuma-comet-battery-dev-data.dtsi"
+	};
+};

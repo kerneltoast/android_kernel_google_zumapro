@@ -1,0 +1,34 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Charging device tree entries specific to Comet
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+#include "zuma-comet-charging-common.dtsi"
+
+&pinctrl_0 {
+/* [MAX17201 : INTB] > ALRT_GAUGE_M > [XEINT_13] */
+	alrt_gauge_m_irq: alrt-gauge-m-irq {
+		samsung,pins = "gpa6-5"; /* XEINT_13 */
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <ZUMA_PIN_DRV_X1>;
+	};
+};
+
+&hsi2c_10 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	#include "zuma/zuma-max1720x-fg.dtsi"
+};
+
+&max1720x_fg {
+	pinctrl-0 = <&alrt_gauge_m_irq>;
+	maxim,irq-gpio = <&gpa6 5 GPIO_ACTIVE_LOW>;
+	maxim,status-charge-threshold-ma = <70>;
+	maxim,r_regval_1720x =  /bits/ 16 <
+		0x2A 0x0C39     /* RelaxCfg Register */
+	>;
+};

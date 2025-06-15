@@ -1,0 +1,53 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Battery device tree entries specific to comet
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+#include "zuma/zuma-dual-battery-common.dtsi"
+#include "zuma/zuma-max777xx_fwupdate.dtsi"
+
+/ {
+	fragment@battery {
+		target-path = "/";
+		__overlay__ {
+
+			google_battery: google,battery {
+				google,chg-topoff-limits = <250 250 250 500 500 500>;
+
+				google,ttf-temp-idx= <2>;
+				google,ttf-adapter = <4500>;
+				google,ttf-soc-table =  <63 83 94 96  99  100>;
+				google,ttf-elap-table = <37 64 92 142 247 90>;
+				google,ttf-tier-table = <0 68 81>;
+			};
+
+			google_dual_batt_gauge: google,dual_batt_gauge {
+				google,vbatt-ov-allowed-idx = <3>;
+				google,seq-fg-soc-limit = <2>;
+				google,seq-fg-delta-limit = <3>;
+			};
+		};
+	};
+};
+
+&max77779_fg {
+	max77779,dual-battery = "maxfg_base";
+	max77779,status-charge-threshold-ma = <30>;
+	max77779,fg_n_regval = /bits/ 16 <
+		0xC8 0x30F0    /* nThermCfg3 Register */
+	>;
+	maxim,fg-data {
+		#include "zuma-comet-battery-data.dtsi"
+	};
+};
+
+&max77779_vimon {
+	status = "okay";
+};
+
+&max77779_fwupdate {
+	status = "okay";
+};

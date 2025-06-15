@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0
+
+obj-$(CONFIG_DRM_PANEL_GS_CT3A)		+= panel-gs-ct3a.o
+obj-$(CONFIG_DRM_PANEL_GS_CT3B)		+= panel-gs-ct3b.o
+obj-$(CONFIG_DRM_PANEL_GS_CT3C)		+= panel-gs-ct3c.o
+obj-$(CONFIG_DRM_PANEL_GS_CT3D)		+= panel-gs-ct3d.o
+obj-$(CONFIG_DRM_PANEL_GS_CT3E)		+= panel-gs-ct3e.o

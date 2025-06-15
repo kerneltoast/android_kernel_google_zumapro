@@ -1,0 +1,172 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * comet display device tree source
+ *
+ * Copyright 2023 Google LLC
+ *
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include "zuma-comet-connector.dtsi"
+
+&dsim_modes {
+	dsim-modes {
+		1072x2400 {
+			mode-name = "1072x2400";
+			pmsk = <
+				0x2 0xB3 0x2 0x5CAB /* p m s k */
+				>;
+			hs-clk = <1102>;
+			esc-clk = <20>;
+		};
+		2152x2076 {
+			mode-name = "2152x2076";
+			pmsk = <
+				0x2 0xDB 0x2 0x1355 /* p m s k */
+				>;
+			hs-clk = <1346>;
+			esc-clk = <20>;
+		};
+		1080x2424 {
+			mode-name = "1080x2424";
+			pmsk = <
+				0x2 0x8D 0x2 0xC9AB /* p m s k */
+				>;
+			hs-clk = <865>;
+			esc-clk = <20>;
+		};
+	};
+};
+
+&drmdsim0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	panel@0 {
+		compatible = "samsung,emul";
+		label = "samsung-emul";
+		channel = <0>;
+
+		/* reset, power */
+		reset-gpios = <&gpp20 2 GPIO_ACTIVE_HIGH>;
+	};
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			/* output */
+			dsim0_connector_out: endpoint {
+			remote-endpoint = <&dsim0_connector_in>;
+			};
+		};
+	};
+};
+
+&drmdsim1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	panel@0 {
+		compatible = "samsung,emul";
+		label = "samsung-emul";
+		channel = <0>;
+
+		/* reset, power */
+		reset-gpios = <&gpp0 0 GPIO_ACTIVE_HIGH>;
+	};
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			/* output */
+			dsim1_connector_out: endpoint {
+			remote-endpoint = <&dsim1_connector_in>;
+			};
+		};
+	};
+};
+
+&drmdecon0 {
+	status = "okay";
+	connector = <0x1 0x2 0x10>;
+	bts_scen_name = "dpu_qurgent_default";
+	bts_scen_min_panel_width = <2152>;
+	bts_scen_min_panel_height = <2076>;
+	bts_scen_min_fps = <120>;
+	bts_scen_min_rt = <1930198>;
+	bts_scen_max_rt = <3494400>;
+	bts_scen_min_peak = <0>;
+	bts_scen_max_peak = <5553600>;
+	bts_scen_skip_with_video;
+};
+
+&drmdecon1 {
+	status = "okay";
+	connector = <0x1 0x2 0x10>;
+	bts_scen_name = "dpu_qurgent_default";
+	bts_scen_min_panel_width = <1080>;
+	bts_scen_min_panel_height = <2424>;
+	bts_scen_min_fps = <120>;
+	bts_scen_min_rt = <5004799>;
+	bts_scen_max_rt = <5105906>;
+	bts_scen_min_peak = <4609478>;
+	bts_scen_max_peak = <4702599>;
+};
+
+&drmdp {
+	status = "okay";
+	aux-orientation = "auto";
+};
+
+&drmdecon2 {
+	status = "okay";
+};
+
+&m_ldo24_reg {
+	regulator-boot-on;
+	regulator-min-microvolt = <1850000>;
+	regulator-max-microvolt = <1850000>;
+	schematic-name = "L24M_INNER_DISP_VDDI";
+	subsys-name = "Display";
+};
+
+&m_ldo14_reg {
+	regulator-boot-on;
+	regulator-min-microvolt = <3000000>;
+	regulator-max-microvolt = <3000000>;
+	schematic-name = "L14M_INNER_DISP_VCI";
+	subsys-name = "Display";
+};
+
+&disp_vddr_0 {
+	status = "okay";
+	gpio = <&gpp21 4 GPIO_ACTIVE_HIGH>;
+	schematic-name = "INNER_DISP_VDDR";
+	subsys-name = "Display";
+};
+
+&s_ldo29_reg {
+	regulator-always-on;
+	regulator-min-microvolt = <1850000>;
+	regulator-max-microvolt = <1850000>;
+	schematic-name = "L29S_OUTER_DISP_VDDI";
+	subsys-name = "Display";
+};
+
+&s_ldo8_reg {
+	regulator-boot-on;
+	regulator-min-microvolt = <3000000>;
+	regulator-max-microvolt = <3000000>;
+	schematic-name = "L8S_OUTER_DISP_VCI";
+	subsys-name = "Display";
+};
+
+&disp_vddd {
+	status = "okay";
+	gpio = <&s2mpg14_gpio 3 GPIO_ACTIVE_HIGH>;
+	schematic-name = "OUTER_DISP_VDDD";
+	subsys-name = "Display";
+};

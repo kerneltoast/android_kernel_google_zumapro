@@ -1,0 +1,61 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Google Comet touch device tree source
+ *
+ * Copyright 2023 Google LLC.
+ *
+ */
+
+&s_ldo27_reg {
+	regulator-min-microvolt = <1800000>;
+	regulator-max-microvolt = <1800000>;
+};
+
+&s_ldo25_reg {
+	regulator-min-microvolt = <3300000>;
+	regulator-max-microvolt = <3300000>;
+};
+
+/* touch_bus_negotiator */
+&tbn {
+	tbn,max_devices = <2>;
+};
+
+&pinctrl_1 {
+	outer_ts_irq: outer-ts-irq {
+		samsung,pins = "gpn1-0";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <ZUMA_PIN_DRV_X1>;
+	};
+};
+
+&pinctrl_12 {
+	outer_ts_reset: outer-ts-reset {
+		samsung,pins = "gpp19-2";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+};
+
+&spi_19 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	pinctrl-0 = <>;
+
+	outer_touch: touchscreen@0 {
+		status = "disabled";
+
+		#address-cells = <1>;
+		#size-cells = <1>;
+		reg = <0>;
+
+		pinctrl-names = "ts_active", "ts_suspend";
+		pinctrl-0 = <&outer_ts_irq &outer_ts_reset>;
+		pinctrl-1 = <>;
+
+		vdd-supply = <&s_ldo27_reg>;
+		avdd-supply = <&s_ldo25_reg>;
+	};
+};
